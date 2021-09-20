@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 
-class NewTransaction extends StatelessWidget {
+class NewTransaction extends StatefulWidget {
   late final Function _addTx;
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
 
   NewTransaction({required addTx}) : _addTx = addTx;
+
+  @override
+  State<NewTransaction> createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final _titleController = TextEditingController();
+
+  final _amountController = TextEditingController();
+
+  void submitData() {
+    final _enteredTitle = _titleController.text;
+    final _enteredAmount = double.parse(
+      _amountController.text,
+    );
+
+    if (_enteredTitle.isEmpty || _enteredAmount <= 0) {
+      return;
+    }
+
+    widget._addTx(
+      _enteredTitle,
+      _enteredAmount,
+    );
+
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +48,7 @@ class NewTransaction extends StatelessWidget {
                 labelText: 'Title',
               ),
               controller: _titleController,
+              onSubmitted: (_) => submitData(),
             ),
             TextField(
               autofocus: true,
@@ -31,21 +57,19 @@ class NewTransaction extends StatelessWidget {
                 labelText: 'Amount',
               ),
               controller: _amountController,
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              onSubmitted: (_) => submitData(),
             ),
             TextButton(
-              onPressed: () {
-                _addTx(
-                  _titleController.text,
-                  double.parse(
-                    _amountController.text,
-                  ),
-                );
-              },
+              onPressed: () => submitData,
               child: Text(
-                'Add Expanse',
+                'Done',
                 style: TextStyle(
-                  color: Colors.deepOrange,
+                  color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.bold,
+                  fontSize: 19,
                 ),
               ),
             )

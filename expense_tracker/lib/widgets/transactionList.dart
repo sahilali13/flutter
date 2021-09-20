@@ -24,13 +24,13 @@ class TransactionList extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 2,
-                      color: Colors.deepOrange,
+                      color: Theme.of(context).primaryColorDark,
                     ),
                   ),
                   child: Text(
-                    '₹ ${_userTransactions[index].amount}',
+                    '₹ ${_userTransactions[index].amount.toStringAsFixed(2)}',
                     style: TextStyle(
-                      color: Colors.deepOrange[900],
+                      color: Theme.of(context).primaryColorDark,
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                     ),
