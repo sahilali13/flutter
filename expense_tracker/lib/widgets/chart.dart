@@ -7,7 +7,6 @@ class Chart extends StatelessWidget {
       elevation: 10,
       child: Text(
         'text',
-        textAlign: TextAlign.center,
       ),
     );
   }

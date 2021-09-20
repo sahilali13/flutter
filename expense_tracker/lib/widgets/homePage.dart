@@ -11,7 +11,9 @@ class HomePage extends StatelessWidget {
           'Expense Tracker',
         ),
       ),
-      body: BodyApp(),
+      body: SingleChildScrollView(
+        child: BodyApp(),
+      ),
     );
   }
 }

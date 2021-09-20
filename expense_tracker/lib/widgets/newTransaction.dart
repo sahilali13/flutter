@@ -7,21 +7,6 @@ class NewTransaction extends StatelessWidget {
 
   NewTransaction({required addTx}) : _addTx = addTx;
 
-  // void submitData() {
-  //   final _enteredTitle = _titleController.text;
-  //   final _enteredAmount = double.parse(_amountController.text);
-
-  //   if (_enteredTitle.isEmpty || _enteredAmount <= 0) {
-  //     print('Nope');
-  //     return;
-  //   }
-
-  //   _addTx(
-  //     _enteredTitle,
-  //     _enteredAmount,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -38,7 +23,6 @@ class NewTransaction extends StatelessWidget {
                 labelText: 'Title',
               ),
               controller: _titleController,
-              //onSubmitted: (_) => submitData(),
             ),
             TextField(
               autofocus: true,
@@ -47,10 +31,6 @@ class NewTransaction extends StatelessWidget {
                 labelText: 'Amount',
               ),
               controller: _amountController,
-              // keyboardType: TextInputType.numberWithOptions(
-              //   decimal: true,
-              // ),
-              // onSubmitted: (_) => submitData(),
             ),
             TextButton(
               onPressed: () {
