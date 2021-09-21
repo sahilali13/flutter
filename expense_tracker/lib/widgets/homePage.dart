@@ -1,7 +1,7 @@
 import 'package:expense_tracker/widgets/newTransaction.dart';
 import 'package:flutter/material.dart';
 
-import './chart.dart';
+import '../widgets/chart.dart';
 import './transactionList.dart';
 import '../models/transaction.dart';
 
@@ -11,14 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'Groceries',
-      amount: 500,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _userTransactions = [];
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((_element) {
+      return _element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
 
   void _addNewTransaction(String title, double amount) {
     final _newTx = Transaction(
@@ -73,9 +72,9 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(),
+            Chart(_recentTransactions),
             TransactionList(
-              userTransactions: _userTransactions,
+              _userTransactions,
             ),
           ],
         ),
