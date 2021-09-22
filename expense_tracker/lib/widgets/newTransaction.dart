@@ -14,7 +14,7 @@ class _NewTransactionState extends State<NewTransaction> {
 
   final _amountController = TextEditingController();
 
-  void submitData() {
+  void _submitData() {
     final _enteredTitle = _titleController.text;
     final _enteredAmount = double.parse(
       _amountController.text,
@@ -30,6 +30,15 @@ class _NewTransactionState extends State<NewTransaction> {
     );
 
     Navigator.of(context).pop();
+  }
+
+  void _datePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    );
   }
 
   @override
@@ -48,7 +57,7 @@ class _NewTransactionState extends State<NewTransaction> {
                 labelText: 'Title',
               ),
               controller: _titleController,
-              onSubmitted: (_) => submitData(),
+              onSubmitted: (_) => _submitData(),
             ),
             TextField(
               autofocus: true,
@@ -60,14 +69,29 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.numberWithOptions(
                 decimal: true,
               ),
-              onSubmitted: (_) => submitData(),
+              onSubmitted: (_) => _submitData(),
             ),
-            TextButton(
-              onPressed: () => submitData,
+            Row(
+              children: <Widget>[
+                Text('No Date'),
+                TextButton(
+                  onPressed: _datePicker,
+                  child: Text(
+                    'Choose Date',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () => _submitData,
               child: Text(
                 'Done',
                 style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).textTheme.button!.color,
                   fontWeight: FontWeight.bold,
                   fontSize: 19,
                 ),
