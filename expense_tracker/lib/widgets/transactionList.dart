@@ -2,6 +2,7 @@ import 'package:expense_tracker/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class TransactionList extends StatelessWidget {
   late final List<Transaction> _userTransactions;
   late Function _deleteTx;
@@ -13,24 +14,26 @@ class TransactionList extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: _userTransactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text(
-                  'No Transactions Yet!!!',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
+          ? LayoutBuilder(builder: (_ctx, _constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    'No Transactions Yet!!!',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                ),
-              ],
-            )
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: _constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            })
           : ListView.builder(
               itemBuilder: (ctx, _index) {
                 return Card(
