@@ -12,7 +12,6 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: 500,
       child: _userTransactions.isEmpty
           ? Column(
               children: <Widget>[
@@ -24,7 +23,7 @@ class TransactionList extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                  height: 450,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   child: Image.asset(
                     'assets/images/waiting.png',
                     fit: BoxFit.cover,
