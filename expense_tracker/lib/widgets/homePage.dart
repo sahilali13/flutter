@@ -1,5 +1,6 @@
 import 'package:expense_tracker/widgets/newTransaction.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import '../widgets/chart.dart';
 import './transactionList.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Transaction> _userTransactions = [];
   bool _showChart = false;
+  late final _mediaContext = MediaQuery.of(context);
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((_element) {
@@ -58,6 +60,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _isLandscape = _mediaContext.orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Expense Tracker',
@@ -72,52 +75,67 @@ class _HomePageState extends State<HomePage> {
         )
       ],
     );
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _startAddNewTransaction(context),
-        child: Icon(
-          Icons.add,
-        ),
+    final _listOfTransactions = Container(
+      height: (_mediaContext.size.height -
+              appBar.preferredSize.height -
+              _mediaContext.padding.top) *
+          0.7,
+      child: TransactionList(
+        _userTransactions,
+        _deleteTransactions,
       ),
+    );
+    final _themeContext = Theme.of(context);
+    return Scaffold(
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => _startAddNewTransaction(context),
+              child: Icon(
+                Icons.add,
+              ),
+            ),
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Show Chart',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Switch(
-                  value: _showChart,
-                  onChanged: (_val) {
-                    setState(() {
-                      _showChart = _val;
-                    });
-                  },
-                ),
-              ],
-            ),
+            if (!_isLandscape)
+              Container(
+                height: (_mediaContext.size.height -
+                        appBar.preferredSize.height -
+                        _mediaContext.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!_isLandscape) _listOfTransactions,
+            if (_isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Show Chart',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Switch.adaptive(
+                    activeColor: _themeContext.colorScheme.secondary,
+                    value: _showChart,
+                    onChanged: (_val) {
+                      setState(() {
+                        _showChart = _val;
+                      });
+                    },
+                  ),
+                ],
+              ),
             _showChart
                 ? Container(
-                    height: (MediaQuery.of(context).size.height -
+                    height: (_mediaContext.size.height -
                             appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.3,
+                            _mediaContext.padding.top) *
+                        0.7,
                     child: Chart(_recentTransactions),
                   )
-                : Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child: TransactionList(
-                      _userTransactions,
-                      _deleteTransactions,
-                    ),
-                  ),
+                : _listOfTransactions,
           ],
         ),
       ),

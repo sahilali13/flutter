@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 class NewTransaction extends StatefulWidget {
   late final Function _addTx;
@@ -13,6 +14,7 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  late final _themeContext = Theme.of(context);
   DateTime? _chosenDate;
 
   void _submitData() {
@@ -55,67 +57,74 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              autofocus: true,
-              autocorrect: true,
-              decoration: InputDecoration(
-                labelText: 'Title',
-              ),
-              controller: _titleController,
-              onSubmitted: (_) => _submitData(),
-            ),
-            TextField(
-              autofocus: true,
-              autocorrect: true,
-              decoration: InputDecoration(
-                labelText: 'Amount',
-              ),
-              controller: _amountController,
-              keyboardType: TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              onSubmitted: (_) => _submitData(),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    _chosenDate == null
-                        ? 'No Date Chosen'
-                        : 'Date Chosen: ${DateFormat('dd-MM-yyyy').format(_chosenDate!)}',
-                  ),
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 10,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                autofocus: true,
+                autocorrect: true,
+                decoration: InputDecoration(
+                  labelText: 'Title',
                 ),
-                TextButton(
-                  onPressed: _datePicker,
-                  child: Text(
-                    'Choose Date',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
+                controller: _titleController,
+                onSubmitted: (_) => _submitData(),
+              ),
+              TextField(
+                autofocus: true,
+                autocorrect: true,
+                decoration: InputDecoration(
+                  labelText: 'Amount',
+                ),
+                controller: _amountController,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                onSubmitted: (_) => _submitData(),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _chosenDate == null
+                          ? 'No Date Chosen'
+                          : 'Date Chosen: ${DateFormat('dd-MM-yyyy').format(_chosenDate!)}',
                     ),
                   ),
-                )
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () => _submitData,
-              child: Text(
-                'Done',
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.button!.color,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19,
-                ),
+                  TextButton(
+                    onPressed: _datePicker,
+                    child: Text(
+                      'Choose Date',
+                      style: TextStyle(
+                        color: _themeContext.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
+              ElevatedButton(
+                onPressed: () => _submitData,
+                child: Text(
+                  'Done',
+                  style: TextStyle(
+                    color: _themeContext.textTheme.button!.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
