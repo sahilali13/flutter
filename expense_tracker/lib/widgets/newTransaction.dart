@@ -1,6 +1,7 @@
+import 'package:expense_tracker/widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 
 class NewTransaction extends StatefulWidget {
   late final Function _addTx;
@@ -100,16 +101,7 @@ class _NewTransactionState extends State<NewTransaction> {
                           : 'Date Chosen: ${DateFormat('dd-MM-yyyy').format(_chosenDate!)}',
                     ),
                   ),
-                  TextButton(
-                    onPressed: _datePicker,
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        color: _themeContext.primaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
+                  AdaptiveTextButton('Choose Date', _datePicker),
                 ],
               ),
               ElevatedButton(
