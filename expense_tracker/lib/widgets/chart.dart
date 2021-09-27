@@ -1,12 +1,13 @@
-import 'package:expense_tracker/models/transaction.dart';
-import 'package:expense_tracker/widgets/chartBar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Chart extends StatelessWidget {
-  late final List<Transaction> _recentTransaction;
+import '../models/transaction.dart';
+import '../widgets/chartBar.dart';
 
-  Chart(this._recentTransaction);
+class Chart extends StatelessWidget {
+  final List<Transaction> _recentTransaction;
+
+  const Chart(this._recentTransaction);
 
   List<Map<String, dynamic>> get _groupedTransactions {
     return List.generate(7, (_index) {
@@ -38,7 +39,7 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 10,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(

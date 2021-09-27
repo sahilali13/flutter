@@ -1,15 +1,18 @@
-import 'package:expense_tracker/widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class NewTransaction extends StatefulWidget {
-  late final Function _addTx;
+import '../widgets/adaptive_text_button.dart';
 
-  NewTransaction({required addTx}) : _addTx = addTx;
+class NewTransaction extends StatefulWidget {
+  final Function _addTx;
+
+  const NewTransaction(this._addTx);
 
   @override
-  State<NewTransaction> createState() => _NewTransactionState();
+  State<NewTransaction> createState() {
+    return _NewTransactionState();
+  }
 }
 
 class _NewTransactionState extends State<NewTransaction> {
@@ -56,6 +59,8 @@ class _NewTransactionState extends State<NewTransaction> {
     });
   }
 
+  late final _mediaQueryContext = MediaQuery.of(context);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -66,7 +71,7 @@ class _NewTransactionState extends State<NewTransaction> {
             top: 10,
             left: 10,
             right: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            bottom: _mediaQueryContext.viewInsets.bottom + 10,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -74,7 +79,7 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 autofocus: true,
                 autocorrect: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Title',
                 ),
                 controller: _titleController,
@@ -83,7 +88,7 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 autofocus: true,
                 autocorrect: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Amount',
                 ),
                 controller: _amountController,

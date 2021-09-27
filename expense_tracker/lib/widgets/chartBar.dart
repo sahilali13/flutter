@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
-  late final String _label;
-  late final double _spendingAmount;
-  late final double _spendingPctOfTotal;
+  final String _label;
+  final double _spendingAmount;
+  final double _spendingPctOfTotal;
 
-  ChartBar(this._label, this._spendingAmount, this._spendingPctOfTotal);
+  const ChartBar(this._label, this._spendingAmount, this._spendingPctOfTotal);
 
   @override
   Widget build(BuildContext context) {
+    final _themeContext = Theme.of(context);
     return LayoutBuilder(
       builder: (_ctx, _constraints) {
         return Column(
@@ -35,7 +36,7 @@ class ChartBar extends StatelessWidget {
                         color: Colors.grey,
                         width: 1.0,
                       ),
-                      color: Color.fromRGBO(220, 220, 220, 1),
+                      color: const Color.fromRGBO(220, 220, 220, 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -43,7 +44,7 @@ class ChartBar extends StatelessWidget {
                     heightFactor: _spendingPctOfTotal,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: _themeContext.primaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),

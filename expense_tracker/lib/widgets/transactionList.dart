@@ -1,10 +1,11 @@
-import 'package:expense_tracker/models/transaction.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import '../models/transaction.dart';
+import '../widgets/list_item.dart';
 
 // ignore: must_be_immutable
 class TransactionList extends StatelessWidget {
-  late final List<Transaction> _userTransactions;
+  final List<Transaction> _userTransactions;
   late Function _deleteTx;
 
   TransactionList(this._userTransactions, this._deleteTx);
@@ -23,7 +24,7 @@ class TransactionList extends StatelessWidget {
                     'No Transactions Yet!!!',
                     style: _themeContext.textTheme.headline6,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -36,60 +37,18 @@ class TransactionList extends StatelessWidget {
                 ],
               );
             })
-          : ListView.builder(
-              itemBuilder: (ctx, _index) {
-                return Card(
-                  elevation: 10,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5,
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                          child: Text(
-                            '\$${_userTransactions[_index].amount}',
-                            style: _themeContext.textTheme.headline6,
-                          ),
-                        ),
-                      ),
+          : ListView(
+              children: _userTransactions
+                  .map(
+                    (_tx) => ListItem(
+                      key: ValueKey(_tx.id),
+                      transaction: _tx,
+                      themeContext: _themeContext,
+                      mediaQuery: _mediaQuery,
+                      deleteTx: _deleteTx,
                     ),
-                    title: Text(
-                      _userTransactions[_index].title,
-                      style: _themeContext.textTheme.headline6,
-                    ),
-                    subtitle: Text(
-                      DateFormat('dd-MM-yyyy').format(
-                        _userTransactions[_index].date,
-                      ),
-                    ),
-                    trailing: _mediaQuery.size.width > 400
-                        ? TextButton.icon(
-                            onPressed: () =>
-                                _deleteTx(_userTransactions[_index].id),
-                            icon: Icon(Icons.delete),
-                            label: Text('Delete'),
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  _themeContext.errorColor),
-                              textStyle: MaterialStateProperty.all<TextStyle?>(
-                                _themeContext.textTheme.headline6,
-                              ),
-                            ),
-                          )
-                        : IconButton(
-                            onPressed: () =>
-                                _deleteTx(_userTransactions[_index].id),
-                            icon: Icon(Icons.delete),
-                            color: _themeContext.errorColor,
-                          ),
-                  ),
-                );
-              },
-              itemCount: _userTransactions.length,
+                  )
+                  .toList(),
             ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './widgets/homePage.dart';
 
 void main() {
@@ -21,7 +22,7 @@ class MainApp extends StatelessWidget {
                 fontSize: 18 * _textScaleFactor,
                 fontWeight: FontWeight.bold,
               ),
-              button: TextStyle(
+              button: const TextStyle(
                 color: Colors.white,
               ),
             ),

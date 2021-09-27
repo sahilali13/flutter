@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
-class AdaptiveTextButton extends StatelessWidget {
-  late final _title;
-  late final _handler;
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-  AdaptiveTextButton(
+class AdaptiveTextButton extends StatelessWidget {
+  final _title;
+  final _handler;
+
+  const AdaptiveTextButton(
     this._title,
     this._handler,
   );
