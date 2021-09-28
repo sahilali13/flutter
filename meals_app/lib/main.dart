@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/models/theme_data.dart';
 
-import './pages/categories_page.dart';
+import './models/routes.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,14 +10,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _themeData = ThemeData(
-      primarySwatch: Colors.blue,
-    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Meals App',
-      theme: _themeData,
-      home: const CategoriesPage(),
+      theme: themeData,
+      routes: routes,
     );
   }
 }

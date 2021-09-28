@@ -8,28 +8,34 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _appBar = AppBar(
+      title: const Text(
+        'Meals App',
+      ),
+    );
+
+    var _body = GridView(
+      padding: const EdgeInsets.all(25),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 3 / 2,
+      ),
+      children: dummyCategories
+          .map(
+            (_data) => CategoryItem(
+              _data.id,
+              _data.title,
+              _data.color,
+            ),
+          )
+          .toList(),
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Meals App',
-        ),
-      ),
-      body: GridView(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 3 / 2,
-        ),
-        children: dummyCategories
-            .map(
-              (_data) => CategoryItem(
-                _data.title,
-                _data.color,
-              ),
-            )
-            .toList(),
-      ),
+      appBar: _appBar,
+      body: _body,
     );
   }
 }
