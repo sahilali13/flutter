@@ -5,40 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "expense_tracker",
-            "cwd": "expense_tracker",
+            "name": "meals_app",
+            "cwd": "meals_app",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "expense_tracker (profile mode)",
-            "cwd": "expense_tracker",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "first_app",
-            "cwd": "first_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "first_app (profile mode)",
-            "cwd": "first_app",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "the_basics",
-            "cwd": "the_basics",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "the_basics (profile mode)",
-            "cwd": "the_basics",
+            "name": "meals_app (profile mode)",
+            "cwd": "meals_app",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
