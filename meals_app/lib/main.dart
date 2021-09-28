@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:meals_app/models/theme_data.dart';
 
-import './models/routes.dart';
+import './assets/theme_data.dart';
+import './assets/routes.dart';
 
 void main() => runApp(const MyApp());
 

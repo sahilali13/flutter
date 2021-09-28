@@ -14,7 +14,7 @@ class CategoryItem extends StatelessWidget {
     this._color,
   );
 
-  void selectCategory(BuildContext _ctx) {
+  void _selectCategory(BuildContext _ctx) {
     Navigator.of(_ctx).pushNamed(
       CategoryMealsPage.routeName,
       arguments: {
@@ -50,7 +50,7 @@ class CategoryItem extends StatelessWidget {
     );
 
     return InkWell(
-      onTap: () => selectCategory(context),
+      onTap: () => _selectCategory(context),
       splashColor: _themeContext.primaryColor,
       borderRadius: BorderRadius.circular(15),
       child: _child,
