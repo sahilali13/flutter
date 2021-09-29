@@ -33,9 +33,6 @@ class CategoriesPage extends StatelessWidget {
           .toList(),
     );
 
-    return Scaffold(
-      appBar: _appBar,
-      body: _body,
-    );
+    return _body;
   }
 }
