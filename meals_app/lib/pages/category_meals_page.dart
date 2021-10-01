@@ -20,6 +20,7 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
   @override
   void didChangeDependencies() {
     var _modalRouteContext = ModalRoute.of(context)!;
+
     final _routeArgs =
         _modalRouteContext.settings.arguments as Map<String, String>;
     _categoryTitle = _routeArgs['title'] as String;
@@ -32,12 +33,6 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
       },
     ).toList();
     super.didChangeDependencies();
-  }
-
-  void _removeMeal(String _mealID) {
-    setState(() {
-      _categoryMeals.removeWhere((_meal) => _meal.id == _mealID);
-    });
   }
 
   @override
@@ -57,11 +52,7 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
           duration: _categoryMeals[_index].duration,
           imageUrl: _categoryMeals[_index].imageUrl,
           title: _categoryMeals[_index].title,
-          removeItem: _removeMeal,
         );
-        // Text(
-        //   _categoryMeals[_index].title,
-        // );
       },
       itemCount: _categoryMeals.length,
     );
