@@ -8,12 +8,6 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _appBar = AppBar(
-      title: const Text(
-        'Meals App',
-      ),
-    );
-
     var _body = GridView(
       padding: const EdgeInsets.all(25),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

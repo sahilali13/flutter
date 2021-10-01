@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../pages/fliters_page.dart';
+
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
 
   Widget _buildListTile(
     IconData _icon,
     String _title,
+    var _tapHandler,
   ) {
     return ListTile(
       leading: Icon(
@@ -19,9 +22,12 @@ class MainDrawer extends StatelessWidget {
           fontSize: 24,
         ),
       ),
-      onTap: () {},
+      onTap: _tapHandler,
     );
   }
+
+  _navigatorPushNamed(BuildContext context, String _route) =>
+      Navigator.of(context).pushNamed(_route);
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +57,22 @@ class MainDrawer extends StatelessWidget {
           _buildListTile(
             Icons.restaurant,
             'Meals',
+            () {
+              _navigatorPushNamed(
+                context,
+                '/',
+              );
+            },
           ),
           _buildListTile(
             Icons.settings,
             'Filter',
+            () {
+              _navigatorPushNamed(
+                context,
+                FiltersPage.routeName,
+              );
+            },
           ),
         ],
       ),
