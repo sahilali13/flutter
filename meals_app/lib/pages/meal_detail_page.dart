@@ -4,8 +4,12 @@ import '../data/dummy_data.dart';
 
 class MealDetailPage extends StatelessWidget {
   static const routeName = './meal-detail';
-
-  const MealDetailPage({Key? key}) : super(key: key);
+  // ignore: prefer_typing_uninitialized_variables
+  final _toggleFavourite;
+  // ignore: prefer_typing_uninitialized_variables
+  final _isMealFavourite;
+  const MealDetailPage(this._toggleFavourite, this._isMealFavourite, {Key? key})
+      : super(key: key);
 
   Widget _buildSectionTitle(
     String _txt,
@@ -143,15 +147,17 @@ class MealDetailPage extends StatelessWidget {
       ),
     );
 
+    var _floatingActionButton = FloatingActionButton(
+      onPressed: () => _toggleFavourite(_mealId),
+      child: Icon(
+        _isMealFavourite(_mealId) ? Icons.star : Icons.star_border,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
     return Scaffold(
       appBar: _appBar,
       body: _body,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pop(_mealId),
-        child: const Icon(
-          Icons.delete,
-        ),
-      ),
+      floatingActionButton: _floatingActionButton,
     );
   }
 }

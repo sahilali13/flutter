@@ -24,7 +24,10 @@ class _MyAppState extends State<MyApp> {
     'vegan': false,
     'lactose': false,
   };
+
   List<Meal> _availableMeals = dummyMeals;
+
+  final List<Meal> _favouriteMeals = [];
 
   void _setFilters(Map<String, bool> _filterData) {
     setState(() {
@@ -48,19 +51,36 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _toggleFavourite(String _mealId) {
+    final _existingIndex =
+        _favouriteMeals.indexWhere((_meal) => _meal.id == _mealId);
+    if (_existingIndex >= 0) {
+      _favouriteMeals.removeAt(_existingIndex);
+    } else {
+      _favouriteMeals
+          .add(dummyMeals.firstWhere((_meal) => _meal.id == _mealId));
+    }
+  }
+
+  bool _isMealFavourite(String _id) {
+    return _favouriteMeals.any((_meal) => _meal.id == _id);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var _routes = {
+      '/': (_ctx) => TabsPage(_favouriteMeals),
+      CategoryMealsPage.routeName: (_ctx) => CategoryMealsPage(_availableMeals),
+      MealDetailPage.routeName: (_ctx) =>
+          MealDetailPage(_toggleFavourite, _isMealFavourite),
+      FiltersPage.routeName: (_ctx) => FiltersPage(_filters, _setFilters),
+    };
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Meals App',
       theme: themeData,
-      routes: {
-        '/': (_ctx) => const TabsPage(),
-        CategoryMealsPage.routeName: (_ctx) =>
-            CategoryMealsPage(_availableMeals),
-        MealDetailPage.routeName: (_ctx) => const MealDetailPage(),
-        FiltersPage.routeName: (_ctx) => FiltersPage(_filters, _setFilters),
-      },
+      routes: _routes,
     );
   }
 }

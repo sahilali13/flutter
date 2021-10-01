@@ -53,84 +53,86 @@ class _FiltersPageState extends State<FiltersPage> {
   @override
   Widget build(BuildContext context) {
     final _themeContext = Theme.of(context);
+    var _appBar = AppBar(
+      title: const Text('Filters'),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {
+            final _selectedFilters = {
+              'gluten': _glutenFree,
+              'vegetarian': _vegetarian,
+              'vegan': _vegan,
+              'lactose': _lactoseFree,
+            };
+            widget._saveFilters(_selectedFilters);
+          },
+          icon: const Icon(
+            Icons.save,
+          ),
+        ),
+      ],
+    );
+    var _body = Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            'Filter your meals',
+            style: _themeContext.textTheme.headline6,
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            children: <Widget>[
+              _buildSwitchListTile(
+                _glutenFree,
+                "Gluten-Free",
+                "Only include gluten-free meals",
+                (_newValue) {
+                  setState(() {
+                    _glutenFree = _newValue;
+                  });
+                },
+              ),
+              _buildSwitchListTile(
+                _vegetarian,
+                'Vegetarian',
+                'Only show vegetarian meals',
+                (_newValue) {
+                  setState(() {
+                    _vegetarian = _newValue;
+                  });
+                },
+              ),
+              _buildSwitchListTile(
+                _vegan,
+                'Vegan',
+                'Only show vegan meals',
+                (_newValue) {
+                  setState(() {
+                    _vegan = _newValue;
+                  });
+                },
+              ),
+              _buildSwitchListTile(
+                _lactoseFree,
+                'Lactose-Free',
+                'Only show lactose-free meals',
+                (_newValue) {
+                  setState(() {
+                    _lactoseFree = _newValue;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Filters'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              final _selectedFilters = {
-                'gluten': _glutenFree,
-                'vegetarian': _vegetarian,
-                'vegan': _vegan,
-                'lactose': _lactoseFree,
-              };
-              widget._saveFilters(_selectedFilters);
-            },
-            icon: const Icon(
-              Icons.save,
-            ),
-          ),
-        ],
-      ),
+      appBar: _appBar,
       drawer: const MainDrawer(),
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              'Filter your meals',
-              style: _themeContext.textTheme.headline6,
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: <Widget>[
-                _buildSwitchListTile(
-                  _glutenFree,
-                  "Gluten-Free",
-                  "Only include gluten-free meals",
-                  (_newValue) {
-                    setState(() {
-                      _glutenFree = _newValue;
-                    });
-                  },
-                ),
-                _buildSwitchListTile(
-                  _vegetarian,
-                  'Vegetarian',
-                  'Only show vegetarian meals',
-                  (_newValue) {
-                    setState(() {
-                      _vegetarian = _newValue;
-                    });
-                  },
-                ),
-                _buildSwitchListTile(
-                  _vegan,
-                  'Vegan',
-                  'Only show vegan meals',
-                  (_newValue) {
-                    setState(() {
-                      _vegan = _newValue;
-                    });
-                  },
-                ),
-                _buildSwitchListTile(
-                  _lactoseFree,
-                  'Lactose-Free',
-                  'Only show lactose-free meals',
-                  (_newValue) {
-                    setState(() {
-                      _lactoseFree = _newValue;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: _body,
     );
   }
 }

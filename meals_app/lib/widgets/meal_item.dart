@@ -10,7 +10,6 @@ class MealItem extends StatelessWidget {
   final int _duration;
   final Complexity _complexity;
   final Affordability _affordability;
-  final Function _removeItem;
 
   // ignore: use_key_in_widget_constructors
   const MealItem({
@@ -20,14 +19,12 @@ class MealItem extends StatelessWidget {
     required duration,
     required imageUrl,
     required title,
-    required removeItem,
   })  : _title = title,
         _imageUrl = imageUrl,
         _duration = duration,
         _complexity = complexity,
         _affordability = affordability,
-        _id = id,
-        _removeItem = removeItem;
+        _id = id;
 
   String get _complexityText {
     switch (_complexity) {
@@ -56,16 +53,10 @@ class MealItem extends StatelessWidget {
   }
 
   void _selectMeal(BuildContext _ctx) {
-    Navigator.of(_ctx)
-        .pushNamed(
+    Navigator.of(_ctx).pushNamed(
       MealDetailPage.routeName,
       arguments: _id,
-    )
-        .then((_result) {
-      if (_result != null) {
-        _removeItem(_result);
-      }
-    });
+    );
   }
 
   @override
