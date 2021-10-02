@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/products_provider.dart';
 
+import '../providers/products_provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../screens/products_overview_screen.dart';
 
@@ -22,9 +22,11 @@ class MyApp extends StatelessWidget {
           ),
       fontFamily: 'Lato',
     );
+
     var _routes = {
       ProductDetailScreen.routeName: (_ctx) => const ProductDetailScreen(),
     };
+
     return ChangeNotifierProvider(
       create: (_ctx) => ProductsProvider(),
       child: MaterialApp(
