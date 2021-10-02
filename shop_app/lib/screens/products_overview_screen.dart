@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/product_item.dart';
-import '../data/dummy_data.dart';
+import '../widgets/products_overview_grid.dart';
 
 class ProductsOverviewScreen extends StatelessWidget {
-  final _loadedProducts = dummyProducts;
-  ProductsOverviewScreen({Key? key}) : super(key: key);
+  const ProductsOverviewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var _appBar = AppBar(
+      title: const Text(
+        'Shop App',
+      ),
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Shop App',
-        ),
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        itemCount: _loadedProducts.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (_ctx, _index) => ProductItem(
-          imageUrl: _loadedProducts[_index].imageUrl,
-          title: _loadedProducts[_index].title,
-          id: _loadedProducts[_index].id,
-        ),
-      ),
+      appBar: _appBar,
+      body: const ProductsOverviewGrid(),
     );
   }
 }

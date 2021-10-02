@@ -2,4 +2,4 @@
 
 Flutter & Dart - The Complete Guide [2021 Edition]
 
-Section 7 - 
+Section 7
