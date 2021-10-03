@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/orders_provider.dart';
 
+import '../providers/orders_provider.dart';
 import '../widgets/cart_item.dart';
 import '../providers/cart_provider.dart';
 
@@ -31,7 +31,8 @@ class CartScreen extends StatelessWidget {
                 const Spacer(),
                 Chip(
                   label: Text(
-                    '${_cart.totalAmount}',
+                    // ignore: unnecessary_string_interpolations
+                    '${_cart.totalAmount.toStringAsFixed(2)}',
                     style: TextStyle(
                       color:
                           Theme.of(context).primaryTextTheme.headline6!.color,
