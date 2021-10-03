@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/orders_provider.dart';
 
 import '../widgets/cart_item.dart';
 import '../providers/cart_provider.dart';
@@ -11,6 +12,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _cart = Provider.of<CartProvider>(context);
     var _body = Column(
       children: <Widget>[
         Card(
@@ -28,20 +30,23 @@ class CartScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 Chip(
-                  label: Consumer<CartProvider>(
-                      builder: (_, _cartTotal, __) => Text(
-                            '${_cartTotal.totalAmount}',
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .primaryTextTheme
-                                  .headline6!
-                                  .color,
-                            ),
-                          )),
+                  label: Text(
+                    '${_cart.totalAmount}',
+                    style: TextStyle(
+                      color:
+                          Theme.of(context).primaryTextTheme.headline6!.color,
+                    ),
+                  ),
                   backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<OrdersProvider>(context, listen: false)
+                        .addOrder(
+                            cartProducts: _cart.items.values.toList(),
+                            total: _cart.totalAmount);
+                    _cart.clear();
+                  },
                   child: const Text(
                     'ORDER NOW',
                   ),
@@ -59,18 +64,19 @@ class CartScreen extends StatelessWidget {
           height: 10,
         ),
         Expanded(
-          child: Consumer<CartProvider>(
-            builder: (_, _cart, __) => ListView.builder(
-                itemBuilder: (_ctx, _index) {
-                  var _cartList = _cart.items.values.toList();
-                  return CartItem(
-                    id: _cartList[_index].id,
-                    price: _cartList[_index].price,
-                    quantity: _cartList[_index].quantity,
-                    title: _cartList[_index].title,
-                  );
-                },
-                itemCount: _cart.items.length),
+          child: ListView.builder(
+            itemBuilder: (_ctx, _index) {
+              var _cartKeys = _cart.items.keys.toList();
+              var _cartValues = _cart.items.values.toList();
+              return CartItem(
+                productId: _cartKeys[_index],
+                id: _cartValues[_index].id,
+                price: _cartValues[_index].price,
+                quantity: _cartValues[_index].quantity,
+                title: _cartValues[_index].title,
+              );
+            },
+            itemCount: _cart.items.length,
           ),
         ),
       ],
