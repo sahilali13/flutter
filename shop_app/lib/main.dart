@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/edit_product_screen.dart';
 import '../screens/user_products_screen.dart';
 import '../screens/orders_screen.dart';
 import '../screens/cart_screen.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       CartScreen.routeName: (_ctx) => const CartScreen(),
       OrdersScreen.routeName: (_ctx) => const OrdersScreen(),
       UserProductsScreen.routeName: (_ctx) => const UserProductsScreen(),
+      EditProductScreen.routeName: (_ctx) => const EditProductScreen(),
     };
 
     return MultiProvider(
