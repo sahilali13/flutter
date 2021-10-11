@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/screens/edit_product_screen.dart';
 
+import '../screens/edit_product_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/user_product_item.dart';
 import '../providers/products_provider.dart';
@@ -32,8 +32,10 @@ class UserProductsScreen extends StatelessWidget {
           itemBuilder: (_ctx, _index) => Column(
             children: [
               UserProductItem(
-                  title: _productsData[_index].title,
-                  imageUrl: _productsData[_index].imageUrl),
+                title: _productsData[_index].title,
+                imageUrl: _productsData[_index].imageUrl,
+                id: _productsData[_index].id,
+              ),
               const Divider(),
             ],
           ),
