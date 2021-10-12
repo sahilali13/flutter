@@ -1,61 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/edit_product_screen.dart';
-import '../screens/user_products_screen.dart';
-import '../screens/orders_screen.dart';
 import '../screens/cart_screen.dart';
-import '../screens/product_detail_screen.dart';
 import '../screens/products_overview_screen.dart';
-import '../providers/orders_provider.dart';
-import '../providers/cart_provider.dart';
-import '../providers/products_provider.dart';
+import '../screens/product_detail_screen.dart';
+import '../providers/products.dart';
+import '../providers/cart.dart';
+import '../providers/orders.dart';
+import '../screens/orders_screen.dart';
+import '../screens/user_products_screen.dart';
+import '../screens/edit_product_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var _themeData = ThemeData(
-      colorScheme: ThemeData().colorScheme.copyWith(
-            primary: Colors.purple,
-            secondary: Colors.deepOrange,
-          ),
-      fontFamily: 'Lato',
-    );
-
-    var _routes = {
-      ProductDetailScreen.routeName: (_ctx) => const ProductDetailScreen(),
-      CartScreen.routeName: (_ctx) => const CartScreen(),
-      OrdersScreen.routeName: (_ctx) => const OrdersScreen(),
-      UserProductsScreen.routeName: (_ctx) => const UserProductsScreen(),
-      EditProductScreen.routeName: (_ctx) => const EditProductScreen(),
-    };
-
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_ctx) => ProductsProvider(),
+        ChangeNotifierProvider.value(
+          value: Products(),
         ),
-        ChangeNotifierProvider(
-          create: (_ctx) => CartProvider(),
+        ChangeNotifierProvider.value(
+          value: Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (_ctx) => OrdersProvider(),
+        ChangeNotifierProvider.value(
+          value: Orders(),
         ),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Shop App',
-        theme: _themeData,
-        home: const ProductsOverviewScreen(),
-        routes: _routes,
-      ),
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            colorScheme:
+                ThemeData().colorScheme.copyWith(secondary: Colors.deepOrange),
+            fontFamily: 'Lato',
+          ),
+          home: const ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => const CartScreen(),
+            OrdersScreen.routeName: (ctx) => const OrdersScreen(),
+            UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => const EditProductScreen(),
+          }),
     );
   }
 }

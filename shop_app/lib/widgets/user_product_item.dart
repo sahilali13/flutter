@@ -1,50 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/products_provider.dart';
-import 'package:shop_app/screens/edit_product_screen.dart';
+
+import '../screens/edit_product_screen.dart';
+import '../providers/products.dart';
 
 class UserProductItem extends StatelessWidget {
-  final String title;
-  final String imageUrl;
-  final String id;
+  final String _id;
+  final String _title;
+  final String _imageUrl;
 
   const UserProductItem({
     Key? key,
-    required this.title,
-    required this.imageUrl,
-    required this.id,
-  }) : super(key: key);
+    required id,
+    required title,
+    required imageUrl,
+  })  : _id = id,
+        _imageUrl = imageUrl,
+        _title = title,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _themeContext = Theme.of(context);
     return ListTile(
-      title: Text(title),
+      title: Text(_title),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: NetworkImage(_imageUrl),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                EditProductScreen.routeName,
-                arguments: id,
-              );
-            },
-            icon: const Icon(Icons.edit),
-            color: _themeContext.colorScheme.primary,
-          ),
-          IconButton(
-            onPressed: () {
-              Provider.of<ProductsProvider>(context, listen: false)
-                  .deleteProduct(id);
-            },
-            icon: const Icon(Icons.delete),
-            color: _themeContext.errorColor,
-          )
-        ],
+      trailing: SizedBox(
+        width: 100,
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(EditProductScreen.routeName, arguments: _id);
+              },
+              color: Theme.of(context).primaryColor,
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                Provider.of<Products>(context, listen: false)
+                    .deleteProduct(_id);
+              },
+              color: Theme.of(context).errorColor,
+            ),
+          ],
+        ),
       ),
     );
   }

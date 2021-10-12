@@ -2,85 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
-import '../screens/cart_screen.dart';
-import '../providers/cart_provider.dart';
+import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
-import '../widgets/products_overview_grid.dart';
+import '../providers/cart.dart';
+import '../screens/cart_screen.dart';
 
-enum _filterOptions {
-  favorites,
-  all,
+enum _FilterOptions {
+  // ignore: constant_identifier_names
+  Favorites,
+  // ignore: constant_identifier_names
+  All,
 }
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
+  _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  var _showFavorites = false;
+  var _showOnlyFavorites = false;
 
   @override
   Widget build(BuildContext context) {
-    var _appBar = AppBar(
-      title: const Text(
-        'Shop App',
-      ),
-      actions: <Widget>[
-        PopupMenuButton(
-          onSelected: (_filterOptions _selectedValue) {
-            setState(() {
-              if (_selectedValue == _filterOptions.favorites) {
-                _showFavorites = true;
-              } else {
-                _showFavorites = false;
-              }
-            });
-          },
-          itemBuilder: (_) => [
-            const PopupMenuItem(
-              child: Text(
-                'Only Favorites',
-              ),
-              value: _filterOptions.favorites,
-            ),
-            const PopupMenuItem(
-              child: Text(
-                'Show All',
-              ),
-              value: _filterOptions.all,
-            ),
-          ],
-          icon: const Icon(
-            Icons.more_vert,
-          ),
-        ),
-        Consumer<CartProvider>(
-          builder: (_, _cart, _childIcon) => Badge(
-            child: _childIcon,
-            value: _cart.itemCount.toString(),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.routeName);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('MyShop'),
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: (_FilterOptions _selectedValue) {
+              setState(() {
+                if (_selectedValue == _FilterOptions.Favorites) {
+                  _showOnlyFavorites = true;
+                } else {
+                  _showOnlyFavorites = false;
+                }
+              });
             },
             icon: const Icon(
-              Icons.shopping_cart,
+              Icons.more_vert,
+            ),
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                child: Text('Only Favorites'),
+                value: _FilterOptions.Favorites,
+              ),
+              const PopupMenuItem(
+                child: Text('Show All'),
+                value: _FilterOptions.All,
+              ),
+            ],
+          ),
+          Consumer<Cart>(
+            builder: (_, _cart, _child) => Badge(
+              child: _child as Widget,
+              value: _cart.itemCount.toString(),
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
             ),
           ),
-        ),
-      ],
-    );
-
-    return Scaffold(
-      appBar: _appBar,
-      drawer: const AppDrawer(),
-      body: ProductsOverviewGrid(
-        showFavorites: _showFavorites,
+        ],
       ),
+      drawer: const AppDrawer(),
+      body: ProductsGrid(showFavs: _showOnlyFavorites),
     );
   }
 }

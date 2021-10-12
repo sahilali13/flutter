@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/edit_product_screen.dart';
-import '../widgets/app_drawer.dart';
+import '../providers/products.dart';
 import '../widgets/user_product_item.dart';
-import '../providers/products_provider.dart';
+import '../widgets/app_drawer.dart';
+import '../screens/edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
@@ -13,33 +13,34 @@ class UserProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _productsData = Provider.of<ProductsProvider>(context).itemGetter;
+    final _productsData = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Products'),
         actions: <Widget>[
           IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(EditProductScreen.routeName),
             icon: const Icon(Icons.add),
-          )
+            onPressed: () {
+              Navigator.of(context).pushNamed(EditProductScreen.routeName);
+            },
+          ),
         ],
       ),
       drawer: const AppDrawer(),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8),
         child: ListView.builder(
-          itemBuilder: (_ctx, _index) => Column(
+          itemCount: _productsData.items.length,
+          itemBuilder: (_, _index) => Column(
             children: [
               UserProductItem(
-                title: _productsData[_index].title,
-                imageUrl: _productsData[_index].imageUrl,
-                id: _productsData[_index].id,
+                id: _productsData.items[_index].id,
+                title: _productsData.items[_index].title,
+                imageUrl: _productsData.items[_index].imageUrl,
               ),
               const Divider(),
             ],
           ),
-          itemCount: _productsData.length,
         ),
       ),
     );

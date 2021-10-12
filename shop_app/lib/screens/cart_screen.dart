@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/orders_provider.dart';
+import '../providers/cart.dart' show Cart;
+import '../providers/orders.dart';
+
 import '../widgets/cart_item.dart';
-import '../providers/cart_provider.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -12,83 +13,67 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _cart = Provider.of<CartProvider>(context);
-    var _body = Column(
-      children: <Widget>[
-        Card(
-          margin: const EdgeInsets.all(15),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Total',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                const Spacer(),
-                Chip(
-                  label: Text(
-                    // ignore: unnecessary_string_interpolations
-                    '${_cart.totalAmount.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      color:
-                          Theme.of(context).primaryTextTheme.headline6!.color,
-                    ),
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Provider.of<OrdersProvider>(context, listen: false)
-                        .addOrder(
-                            cartProducts: _cart.items.values.toList(),
-                            total: _cart.totalAmount);
-                    _cart.clear();
-                  },
-                  child: const Text(
-                    'ORDER NOW',
-                  ),
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (_ctx, _index) {
-              var _cartKeys = _cart.items.keys.toList();
-              var _cartValues = _cart.items.values.toList();
-              return CartItem(
-                productId: _cartKeys[_index],
-                id: _cartValues[_index].id,
-                price: _cartValues[_index].price,
-                quantity: _cartValues[_index].quantity,
-                title: _cartValues[_index].title,
-              );
-            },
-            itemCount: _cart.items.length,
-          ),
-        ),
-      ],
-    );
+    final _cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Cart',
-        ),
+        title: const Text('Your Cart'),
       ),
-      body: _body,
+      body: Column(
+        children: <Widget>[
+          Card(
+            margin: const EdgeInsets.all(15),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Total',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const Spacer(),
+                  Chip(
+                    label: Text(
+                      '\$${_cart.totalAmount.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).primaryTextTheme.headline6!.color,
+                      ),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  TextButton(
+                    child: const Text('ORDER NOW'),
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(
+                        _cart.items.values.toList(),
+                        _cart.totalAmount,
+                      );
+                      _cart.clear();
+                    },
+                    style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor)),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _cart.items.length,
+              itemBuilder: (_ctx, _index) => CartItem(
+                quantity: _cart.items.values.toList()[_index].quantity,
+                id: _cart.items.values.toList()[_index].id,
+                productId: _cart.items.keys.toList()[_index],
+                title: _cart.items.values.toList()[_index].title,
+                price: _cart.items.values.toList()[_index].price,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

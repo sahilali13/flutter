@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
-import '../providers/product_provider.dart';
 import '../screens/product_detail_screen.dart';
+import '../providers/product.dart';
+import '../providers/cart.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({
-    Key? key,
-  }) : super(key: key);
+  const ProductItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _themeContext = Theme.of(context);
-    ProductProvider _product =
-        Provider.of<ProductProvider>(context, listen: false);
-    CartProvider _cart = Provider.of<CartProvider>(context, listen: false);
+    final _product = Provider.of<Product>(context, listen: false);
+    final _cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
             Navigator.of(context).pushNamed(
               ProductDetailScreen.routeName,
@@ -32,50 +28,46 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         footer: GridTileBar(
-          leading: Consumer<ProductProvider>(
+          backgroundColor: Colors.black87,
+          leading: Consumer<Product>(
             builder: (_ctx, _product, _) => IconButton(
-              onPressed: () {
-                _product.toggleFavouriteStatus();
-              },
               icon: Icon(
-                  _product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              color: _themeContext.colorScheme.secondary,
+                _product.isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              color: Theme.of(context).colorScheme.secondary,
+              onPressed: () {
+                _product.toggleFavoriteStatus();
+              },
             ),
           ),
           title: Text(
             _product.title,
             textAlign: TextAlign.center,
           ),
-          backgroundColor: Colors.black87,
           trailing: IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ),
             onPressed: () {
-              _cart.addItemToCart(
-                _product.id,
-                _product.price,
-                _product.title,
-              );
+              _cart.addItem(
+                  _product.id as String, _product.price, _product.title);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
-                    'Item Added',
+                    'Added item to cart!',
                   ),
-                  duration: const Duration(
-                    seconds: 2,
-                  ),
+                  duration: const Duration(seconds: 2),
                   action: SnackBarAction(
                     label: 'UNDO',
-                    onPressed: () => _cart.removeSingleItem(
-                      _product.id,
-                    ),
+                    onPressed: () {
+                      _cart.removeSingleItem(_product.id as String);
+                    },
                   ),
                 ),
               );
             },
-            icon: const Icon(
-              Icons.shopping_cart,
-            ),
-            color: _themeContext.colorScheme.secondary,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),

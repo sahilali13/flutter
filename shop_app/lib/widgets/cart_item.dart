@@ -1,49 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
+import '../providers/cart.dart';
 
 class CartItem extends StatelessWidget {
-  final String _id;
-  final double _price;
-  final int _quantity;
-  final String _title;
-  final String _productId;
+  final String id;
+  final String productId;
+  final double price;
+  final int quantity;
+  final String title;
 
+  // ignore: use_key_in_widget_constructors
   const CartItem({
-    Key? key,
-    required id,
-    required price,
-    required quantity,
-    required title,
-    required productId,
-  })  : _id = id,
-        _price = price,
-        _quantity = quantity,
-        _title = title,
-        _productId = productId,
-        super(key: key);
+    required this.id,
+    required this.productId,
+    required this.price,
+    required this.quantity,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      direction: DismissDirection.endToStart,
-      key: ValueKey(_id),
+      key: ValueKey(id),
       background: Container(
-          color: Theme.of(context).errorColor,
-          child: const Icon(
-            Icons.delete,
-            color: Colors.white,
-            size: 40,
+        color: Theme.of(context).errorColor,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+      ),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (_direction) {
+        return showDialog(
+          context: context,
+          builder: (_ctx) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text(
+              'Do you want to remove the item from the cart?',
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.of(_ctx).pop(false);
+                },
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  Navigator.of(_ctx).pop(true);
+                },
+              )
+            ],
           ),
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(
-            right: 20,
-          ),
-          margin: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 4,
-          )),
+        );
+      },
+      onDismissed: (_direction) {
+        Provider.of<Cart>(context, listen: false).removeItem(productId);
+      },
       child: Card(
         margin: const EdgeInsets.symmetric(
           horizontal: 15,
@@ -54,51 +76,18 @@ class CartItem extends StatelessWidget {
           child: ListTile(
             leading: CircleAvatar(
               child: Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text(
-                    '₹$_price',
-                  ),
+                  child: Text('\$$price'),
                 ),
               ),
             ),
-            title: Text(_title),
-            subtitle: Text('Total: ₹${(_price * _quantity)}'),
-            trailing: Text('$_quantity x'),
+            title: Text(title),
+            subtitle: Text('Total: \$${(price * quantity)}'),
+            trailing: Text('$quantity x'),
           ),
         ),
       ),
-      onDismissed: (direction) {
-        Provider.of<CartProvider>(context, listen: false)
-            .removeItem(_productId);
-      },
-      confirmDismiss: (direction) {
-        return showDialog(
-          context: context,
-          builder: (_ctx) => AlertDialog(
-            title: const Text(
-              'Are you sure?',
-            ),
-            content: const Text(
-              'Do you want to remove the item from the cart?',
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(_ctx).pop(false);
-                },
-                child: const Text('No'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(_ctx).pop(true);
-                },
-                child: const Text('Yes'),
-              )
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/products_provider.dart';
+import '../providers/products.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   static const routeName = '/product-detail';
-  const ProductDetailScreen({
-    Key? key,
-  }) : super(key: key);
+
+  const ProductDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _modalRouteContext = ModalRoute.of(context)!;
-    var _productsProviderContext = Provider.of<ProductsProvider>(
+    final _productId =
+        ModalRoute.of(context)!.settings.arguments as String; // is the id!
+    final _loadedProduct = Provider.of<Products>(
       context,
       listen: false,
-    );
-
-    final _productId = _modalRouteContext.settings.arguments as String;
-
-    final _loadedProduct = _productsProviderContext.findById(
-      _productId,
-    );
-
+    ).findById(_productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _loadedProduct.title,
-        ),
+        title: Text(_loadedProduct.title),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             SizedBox(
               height: 300,
               width: double.infinity,
@@ -40,11 +31,9 @@ class ProductDetailScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Text(
-              '₹${_loadedProduct.price}',
+              '\$${_loadedProduct.price}',
               style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 20,
@@ -55,12 +44,13 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
               child: Text(
                 _loadedProduct.description,
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),
-            ),
+            )
           ],
         ),
       ),
