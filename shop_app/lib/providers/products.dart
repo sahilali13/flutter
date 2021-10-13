@@ -8,7 +8,7 @@ import '../data/dummy_data.dart';
 import '../providers/product.dart';
 
 class Products with ChangeNotifier {
-  final List<Product> _items = dummyProducts;
+  List<Product> _items = dummyProducts;
 
   List<Product> get items {
     return [..._items];
@@ -22,22 +22,21 @@ class Products with ChangeNotifier {
     return _items.firstWhere((_prod) => _prod.id == _id);
   }
 
-  Future<void> addProduct(Product _product) {
+  Future<void> addProduct(Product _product) async {
     final _url = Uri.parse(
       'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products.json',
     );
-    return http
-        .post(
-      _url,
-      body: json.encode({
-        "title": _product.title,
-        "description": _product.description,
-        'price': _product.price,
-        'imageUrl': _product.imageUrl,
-        'isFavorite': _product.isFavorite,
-      }),
-    )
-        .then((_response) {
+    try {
+      final _response = await http.post(
+        _url,
+        body: json.encode({
+          "title": _product.title,
+          "description": _product.description,
+          'price': _product.price,
+          'imageUrl': _product.imageUrl,
+          'isFavorite': _product.isFavorite,
+        }),
+      );
       final _newProduct = Product(
         title: _product.title,
         description: _product.description,
@@ -47,7 +46,9 @@ class Products with ChangeNotifier {
       );
       _items.add(_newProduct);
       notifyListeners();
-    });
+    } catch (_error) {
+      rethrow;
+    }
   }
 
   void updateProduct(String _id, Product _newProduct) {
@@ -55,13 +56,39 @@ class Products with ChangeNotifier {
     if (_prodIndex >= 0) {
       _items[_prodIndex] = _newProduct;
       notifyListeners();
-    } else {
-      //print('...');
-    }
+    } else {}
   }
 
   void deleteProduct(String _id) {
     _items.removeWhere((_prod) => _prod.id == _id);
     notifyListeners();
+  }
+
+  Future<void> fetchAndSetProducts() async {
+    final _url = Uri.parse(
+      'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products.json',
+    );
+    try {
+      final _response = await http.get(_url);
+      final _extractedData =
+          json.decode(_response.body) as Map<String, dynamic>;
+      final List<Product> _loadedProducts = [];
+      _extractedData.forEach((_prodId, _prodData) {
+        _loadedProducts.add(
+          Product(
+            id: _prodId,
+            title: _prodData['title'],
+            description: _prodData['description'],
+            price: _prodData['price'],
+            imageUrl: _prodData['imageUrl'],
+            isFavorite: _prodData['isFavorite'],
+          ),
+        );
+        _items = _loadedProducts;
+        notifyListeners();
+      });
+    } catch (_error) {
+      rethrow;
+    }
   }
 }
