@@ -95,41 +95,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    // ignore: unnecessary_null_comparison
     if (_editedProduct.id != null) {
-      Provider.of<Products>(context, listen: false)
-          .updateProduct(_editedProduct.id as String, _editedProduct);
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+      await Provider.of<Products>(context, listen: false).updateProduct(
+        _editedProduct.id as String,
+        _editedProduct,
+      );
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
-      } catch (_error) {
+      } catch (error) {
         await showDialog(
           context: context,
           builder: (_ctx) => AlertDialog(
-            title: const Text('An Error Occurred!'),
-            content: Text(_error.toString()),
+            title: const Text('An error occurred!'),
+            content: const Text('Something went wrong.'),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => Navigator.of(_ctx).pop(),
                 child: const Text('Okay'),
               ),
             ],
           ),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override
