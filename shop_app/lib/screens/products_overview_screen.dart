@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
+import '../providers/products.dart';
+
+import '../screens/cart_screen.dart';
+
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
-import '../providers/cart.dart';
-import '../providers/products.dart';
-import '../screens/cart_screen.dart';
 
-enum _FilterOptions {
+enum FilterOptions {
   // ignore: constant_identifier_names
   Favorites,
   // ignore: constant_identifier_names
@@ -55,9 +57,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: const Text('MyShop'),
         actions: <Widget>[
           PopupMenuButton(
-            onSelected: (_FilterOptions _selectedValue) {
+            onSelected: (FilterOptions _selectedValue) {
               setState(() {
-                if (_selectedValue == _FilterOptions.Favorites) {
+                if (_selectedValue == FilterOptions.Favorites) {
                   _showOnlyFavorites = true;
                 } else {
                   _showOnlyFavorites = false;
@@ -70,19 +72,19 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             itemBuilder: (_) => [
               const PopupMenuItem(
                 child: Text('Only Favorites'),
-                value: _FilterOptions.Favorites,
+                value: FilterOptions.Favorites,
               ),
               const PopupMenuItem(
                 child: Text('Show All'),
-                value: _FilterOptions.All,
+                value: FilterOptions.All,
               ),
             ],
           ),
           Consumer<Cart>(
-            builder: (_, _cart, _child) => Badge(
-              child: _child as Widget,
-              value: _cart.itemCount.toString(),
+            builder: (_, cart, ch) => Badge(
               color: Theme.of(context).colorScheme.secondary,
+              child: ch,
+              value: cart.itemCount.toString(),
             ),
             child: IconButton(
               icon: const Icon(
@@ -98,9 +100,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator.adaptive(),
+              child: CircularProgressIndicator(),
             )
-          : ProductsGrid(showFavs: _showOnlyFavorites),
+          : ProductsGrid(_showOnlyFavorites),
     );
   }
 }

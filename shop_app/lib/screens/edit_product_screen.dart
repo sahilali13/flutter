@@ -44,19 +44,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final Object? _productId = ModalRoute.of(context)!.settings.arguments;
+      final _productId = ModalRoute.of(context)!.settings.arguments as String;
       // ignore: unnecessary_null_comparison
       if (_productId != null) {
-        _editedProduct = Provider.of<Products>(context, listen: false)
-            .findById(_productId as String);
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(_productId);
         _initValues = {
-          'title': _editedProduct.title,
-          'description': _editedProduct.description,
+          'title': _editedProduct.title as String,
+          'description': _editedProduct.description as String,
           'price': _editedProduct.price.toString(),
+          // 'imageUrl': _editedProduct.imageUrl,
           'imageUrl': '',
         };
-
-        _imageUrlController.text = _editedProduct.imageUrl;
+        _imageUrlController.text = _editedProduct.imageUrl as String;
       }
     }
     _isInit = false;
@@ -96,15 +96,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id != null) {
-      await Provider.of<Products>(context, listen: false).updateProduct(
-        _editedProduct.id as String,
-        _editedProduct,
-      );
+      await Provider.of<Products>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
-      } catch (error) {
+      } catch (_error) {
         await showDialog(
           context: context,
           builder: (_ctx) => AlertDialog(
@@ -112,7 +110,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
             content: const Text('Something went wrong.'),
             actions: <Widget>[
               TextButton(
-                onPressed: () => Navigator.of(_ctx).pop(),
+                onPressed: () {
+                  Navigator.of(_ctx).pop();
+                },
                 child: const Text('Okay'),
               ),
             ],
@@ -124,6 +124,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = false;
     });
     Navigator.of(context).pop();
+    // Navigator.of(context).pop();
   }
 
   @override
@@ -140,7 +141,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator.adaptive(),
+              child: CircularProgressIndicator(),
             )
           : Padding(
               padding: const EdgeInsets.all(16.0),
@@ -155,15 +156,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_priceFocusNode);
                       },
-                      validator: (value) {
-                        if (value!.isEmpty) {
+                      validator: (_value) {
+                        if (_value!.isEmpty) {
                           return 'Please provide a value.';
                         }
                         return null;
                       },
                       onSaved: (_value) {
                         _editedProduct = Product(
-                            title: _value as String,
+                            title: _value,
                             price: _editedProduct.price,
                             description: _editedProduct.description,
                             imageUrl: _editedProduct.imageUrl,
@@ -175,8 +176,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       initialValue: _initValues['price'],
                       decoration: const InputDecoration(labelText: 'Price'),
                       textInputAction: TextInputAction.next,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: TextInputType.number,
                       focusNode: _priceFocusNode,
                       onFieldSubmitted: (_) {
                         FocusScope.of(context)
@@ -224,7 +224,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         _editedProduct = Product(
                           title: _editedProduct.title,
                           price: _editedProduct.price,
-                          description: _value as String,
+                          description: _value,
                           imageUrl: _editedProduct.imageUrl,
                           id: _editedProduct.id,
                           isFavorite: _editedProduct.isFavorite,
@@ -287,7 +287,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 title: _editedProduct.title,
                                 price: _editedProduct.price,
                                 description: _editedProduct.description,
-                                imageUrl: _value as String,
+                                imageUrl: _value,
                                 id: _editedProduct.id,
                                 isFavorite: _editedProduct.isFavorite,
                               );

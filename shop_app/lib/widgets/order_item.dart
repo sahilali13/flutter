@@ -1,15 +1,14 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/orders.dart' as ord;
 
 class OrderItem extends StatefulWidget {
-  final ord.OrderItem _order;
+  final ord.OrderItem order;
 
-  // ignore: use_key_in_widget_constructors
-  const OrderItem({required order}) : _order = order;
+  const OrderItem(this.order, {Key? key}) : super(key: key);
 
   @override
   _OrderItemState createState() => _OrderItemState();
@@ -25,9 +24,9 @@ class _OrderItemState extends State<OrderItem> {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text('\$${widget._order.amount}'),
+            title: Text('\$${widget.order.amount}'),
             subtitle: Text(
-              DateFormat('dd/MM/yyyy hh:mm').format(widget._order.dateTime),
+              DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime),
             ),
             trailing: IconButton(
               icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
@@ -41,22 +40,22 @@ class _OrderItemState extends State<OrderItem> {
           if (_expanded)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              height: min(widget._order.products.length * 20.0 + 10, 100),
+              height: min(widget.order.products.length * 20.0 + 10, 100),
               child: ListView(
-                children: widget._order.products
+                children: widget.order.products
                     .map(
-                      (prod) => Row(
+                      (_prod) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            prod.title,
+                            _prod.title as String,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '${prod.quantity}x \$${prod.price}',
+                            '${_prod.quantity}x \$${_prod.price}',
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.grey,

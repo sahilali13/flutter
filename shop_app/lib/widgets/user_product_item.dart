@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/edit_product_screen.dart';
 import '../providers/products.dart';
 
-class UserProductItem extends StatelessWidget {
-  final String _id;
-  final String _title;
-  final String _imageUrl;
+import '../screens/edit_product_screen.dart';
 
-  const UserProductItem({
-    Key? key,
-    required id,
-    required title,
-    required imageUrl,
-  })  : _id = id,
-        _imageUrl = imageUrl,
-        _title = title,
-        super(key: key);
+class UserProductItem extends StatelessWidget {
+  final String? id;
+  final String? title;
+  final String? imageUrl;
+
+  const UserProductItem(this.id, this.title, this.imageUrl, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _scaffoldMessenger = ScaffoldMessenger.of(context);
+    final scaffold = ScaffoldMessenger.of(context);
     return ListTile(
-      title: Text(_title),
+      title: Text(title as String),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(_imageUrl),
+        backgroundImage: NetworkImage(imageUrl as String),
       ),
       trailing: SizedBox(
         width: 100,
@@ -35,7 +29,7 @@ class UserProductItem extends StatelessWidget {
               icon: const Icon(Icons.edit),
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamed(EditProductScreen.routeName, arguments: _id);
+                    .pushNamed(EditProductScreen.routeName, arguments: id);
               },
               color: Theme.of(context).primaryColor,
             ),
@@ -44,12 +38,12 @@ class UserProductItem extends StatelessWidget {
               onPressed: () async {
                 try {
                   await Provider.of<Products>(context, listen: false)
-                      .deleteProduct(_id);
-                } catch (_error) {
-                  _scaffoldMessenger.showSnackBar(
+                      .deleteProduct(id as String);
+                } catch (error) {
+                  scaffold.showSnackBar(
                     const SnackBar(
                       content: Text(
-                        'Deleting Failed',
+                        'Deleting failed!',
                         textAlign: TextAlign.center,
                       ),
                     ),

@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 
 class CartItem {
   final String id;
-  final String title;
+  final String? title;
   final int quantity;
-  final double price;
+  final double? price;
 
   CartItem({
     required this.id,
@@ -28,20 +28,20 @@ class Cart with ChangeNotifier {
   double get totalAmount {
     var _total = 0.0;
     _items.forEach((_key, _cartItem) {
-      _total += _cartItem.price * _cartItem.quantity;
+      _total += _cartItem.price! * _cartItem.quantity;
     });
     return _total;
   }
 
   void addItem(
-    String _productId,
-    double _price,
-    String _title,
+    String? _productId,
+    double? _price,
+    String? _title,
   ) {
     if (_items.containsKey(_productId)) {
       // change quantity...
       _items.update(
-        _productId,
+        _productId as String,
         (_existingCartItem) => CartItem(
           id: _existingCartItem.id,
           title: _existingCartItem.title,
@@ -51,7 +51,7 @@ class Cart with ChangeNotifier {
       );
     } else {
       _items.putIfAbsent(
-        _productId,
+        _productId as String,
         () => CartItem(
           id: DateTime.now().toString(),
           title: _title,
@@ -68,13 +68,13 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeSingleItem(String _productId) {
+  void removeSingleItem(String? _productId) {
     if (!_items.containsKey(_productId)) {
       return;
     }
     if (_items[_productId]!.quantity > 1) {
       _items.update(
-          _productId,
+          _productId as String,
           (_existingCartItem) => CartItem(
                 id: _existingCartItem.id,
                 title: _existingCartItem.title,

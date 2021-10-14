@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
+
+import '../screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _product = Provider.of<Product>(context, listen: false);
     final _cart = Provider.of<Cart>(context, listen: false);
+    final _authData = Provider.of<Auth>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -23,7 +26,7 @@ class ProductItem extends StatelessWidget {
             );
           },
           child: Image.network(
-            _product.imageUrl,
+            _product.imageUrl as String,
             fit: BoxFit.cover,
           ),
         ),
@@ -36,12 +39,15 @@ class ProductItem extends StatelessWidget {
               ),
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () {
-                _product.toggleFavoriteStatus();
+                _product.toggleFavoriteStatus(
+                  _authData.token,
+                  _authData.userId,
+                );
               },
             ),
           ),
           title: Text(
-            _product.title,
+            _product.title as String,
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
@@ -49,8 +55,7 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
             ),
             onPressed: () {
-              _cart.addItem(
-                  _product.id as String, _product.price, _product.title);
+              _cart.addItem(_product.id, _product.price, _product.title);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -61,7 +66,7 @@ class ProductItem extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {
-                      _cart.removeSingleItem(_product.id as String);
+                      _cart.removeSingleItem(_product.id);
                     },
                   ),
                 ),

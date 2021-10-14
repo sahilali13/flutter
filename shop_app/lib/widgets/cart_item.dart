@@ -8,16 +8,11 @@ class CartItem extends StatelessWidget {
   final String productId;
   final double price;
   final int quantity;
-  final String title;
+  final String? title;
 
-  // ignore: use_key_in_widget_constructors
-  const CartItem({
-    required this.id,
-    required this.productId,
-    required this.price,
-    required this.quantity,
-    required this.title,
-  });
+  const CartItem(this.id, this.productId, this.price, this.quantity, this.title,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +33,7 @@ class CartItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
-      confirmDismiss: (_direction) {
+      confirmDismiss: (direction) {
         return showDialog(
           context: context,
           builder: (_ctx) => AlertDialog(
@@ -48,17 +43,17 @@ class CartItem extends StatelessWidget {
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text('No'),
                 onPressed: () {
                   Navigator.of(_ctx).pop(false);
                 },
+                child: const Text('No'),
               ),
               TextButton(
-                child: const Text('Yes'),
                 onPressed: () {
                   Navigator.of(_ctx).pop(true);
                 },
-              )
+                child: const Text('Yes'),
+              ),
             ],
           ),
         );
@@ -82,7 +77,7 @@ class CartItem extends StatelessWidget {
                 ),
               ),
             ),
-            title: Text(title),
+            title: Text(title as String),
             subtitle: Text('Total: \$${(price * quantity)}'),
             trailing: Text('$quantity x'),
           ),

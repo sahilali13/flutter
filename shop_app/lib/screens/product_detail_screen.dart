@@ -10,15 +10,14 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _productId =
-        ModalRoute.of(context)!.settings.arguments as String; // is the id!
+    final _productId = ModalRoute.of(context)!.settings.arguments as String;
     final _loadedProduct = Provider.of<Products>(
       context,
       listen: false,
     ).findById(_productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_loadedProduct.title),
+        title: Text(_loadedProduct.title as String),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -27,7 +26,7 @@ class ProductDetailScreen extends StatelessWidget {
               height: 300,
               width: double.infinity,
               child: Image.network(
-                _loadedProduct.imageUrl,
+                _loadedProduct.imageUrl as String,
                 fit: BoxFit.cover,
               ),
             ),
@@ -46,7 +45,7 @@ class ProductDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               width: double.infinity,
               child: Text(
-                _loadedProduct.description,
+                _loadedProduct.description as String,
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),
