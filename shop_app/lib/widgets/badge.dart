@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_init_to_null, prefer_if_null_operators
+
 import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
@@ -5,11 +7,10 @@ class Badge extends StatelessWidget {
     Key? key,
     required this.child,
     required this.value,
-    // ignore: avoid_init_to_null
     this.color = null,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final String value;
   final Color? color;
 
@@ -18,7 +19,7 @@ class Badge extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        child,
+        child as Widget,
         Positioned(
           right: 8,
           top: 8,
@@ -26,7 +27,6 @@ class Badge extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              // ignore: prefer_if_null_operators
               color: color != null
                   ? color
                   : Theme.of(context).colorScheme.secondary,

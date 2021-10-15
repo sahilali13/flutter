@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
+import '../providers/products.dart';
+import '../screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
-import '../providers/cart.dart';
-import './cart_screen.dart';
-import '../providers/products.dart';
 
 // ignore: constant_identifier_names
-enum FilterOptions { Favorites, All }
+enum _FilterOptions { Favorites, All }
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
@@ -51,9 +51,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: const Text('MyShop'),
         actions: <Widget>[
           PopupMenuButton(
-            onSelected: (FilterOptions selectedValue) {
+            onSelected: (_FilterOptions _selectedValue) {
               setState(() {
-                if (selectedValue == FilterOptions.Favorites) {
+                if (_selectedValue == _FilterOptions.Favorites) {
                   _showOnlyFavorites = true;
                 } else {
                   _showOnlyFavorites = false;
@@ -66,18 +66,18 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             itemBuilder: (_) => [
               const PopupMenuItem(
                 child: Text('Only Favorites'),
-                value: FilterOptions.Favorites,
+                value: _FilterOptions.Favorites,
               ),
               const PopupMenuItem(
                 child: Text('Show All'),
-                value: FilterOptions.All,
+                value: _FilterOptions.All,
               ),
             ],
           ),
           Consumer<Cart>(
-            builder: (_, cart, ch) => Badge(
-              child: ch as Widget,
-              value: cart.itemCount.toString(),
+            builder: (_, _cart, _ch) => Badge(
+              child: _ch,
+              value: _cart.itemCount.toString(),
             ),
             child: IconButton(
               icon: const Icon(

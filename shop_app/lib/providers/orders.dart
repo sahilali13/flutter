@@ -1,9 +1,11 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import './cart.dart';
+import '../providers/cart.dart';
 
 class OrderItem {
   final String id;
@@ -31,13 +33,11 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    final _url = Uri.parse(
-        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken');
-
+    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com',
+        '/orders/$_userId.json?auth=$_authToken');
     final _response = await http.get(_url);
     final List<OrderItem> _loadedOrders = [];
     final _extractedData = json.decode(_response.body) as Map<String, dynamic>;
-    // ignore: unnecessary_null_comparison
     if (_extractedData == null) {
       return;
     }
@@ -65,21 +65,20 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> _cartProducts, double _total) async {
-    final _url = Uri.parse(
-        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken');
-
+    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com',
+        '/orders/$_userId.json?auth=$_authToken');
     final _timestamp = DateTime.now();
-    final _response = await http.post(
+    final response = await http.post(
       _url,
       body: json.encode({
         'amount': _total,
         'dateTime': _timestamp.toIso8601String(),
         'products': _cartProducts
-            .map((cp) => {
-                  'id': cp.id,
-                  'title': cp.title,
-                  'quantity': cp.quantity,
-                  'price': cp.price,
+            .map((_cp) => {
+                  'id': _cp.id,
+                  'title': _cp.title,
+                  'quantity': _cp.quantity,
+                  'price': _cp.price,
                 })
             .toList(),
       }),
@@ -87,7 +86,7 @@ class Orders with ChangeNotifier {
     _orders.insert(
       0,
       OrderItem(
-        id: json.decode(_response.body)['name'],
+        id: json.decode(response.body)['name'],
         amount: _total,
         dateTime: _timestamp,
         products: _cartProducts,
