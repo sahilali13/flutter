@@ -4,7 +4,7 @@ class CartItem {
   final String id;
   final String? title;
   final int quantity;
-  final double? price;
+  final double price;
 
   CartItem({
     required this.id,
@@ -27,19 +27,18 @@ class Cart with ChangeNotifier {
 
   double get totalAmount {
     var _total = 0.0;
-    _items.forEach((_key, _cartItem) {
-      _total += _cartItem.price! * _cartItem.quantity;
+    _items.forEach((key, _cartItem) {
+      _total += _cartItem.price * _cartItem.quantity;
     });
     return _total;
   }
 
   void addItem(
     String? _productId,
-    double? _price,
+    double _price,
     String? _title,
   ) {
     if (_items.containsKey(_productId)) {
-      // change quantity...
       _items.update(
         _productId as String,
         (_existingCartItem) => CartItem(

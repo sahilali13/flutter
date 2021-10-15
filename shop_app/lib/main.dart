@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './screens/splash_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_detail_screen.dart';
@@ -28,10 +27,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
           create: (_) => Products('', '', []),
-          update: (_, _auth, _previousProducts) => Products(
-            _auth.token,
-            _auth.userId,
-            _previousProducts == null ? [] : _previousProducts.items,
+          update: (ctx, auth, previousProducts) => Products(
+            auth.token,
+            auth.userId,
+            previousProducts == null ? [] : previousProducts.items,
           ),
         ),
         ChangeNotifierProvider.value(
@@ -39,40 +38,31 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
           create: (_) => Orders('', '', []),
-          update: (_, _auth, _previousOrders) => Orders(
-            _auth.token,
-            _auth.userId,
-            _previousOrders == null ? [] : _previousOrders.orders,
+          update: (ctx, auth, previousOrders) => Orders(
+            auth.token,
+            auth.userId,
+            previousOrders == null ? [] : previousOrders.orders,
           ),
         ),
       ],
       child: Consumer<Auth>(
-        builder: (_ctx, _auth, _) => MaterialApp(
+        builder: (ctx, auth, _) => MaterialApp(
           title: 'MyShop',
           theme: ThemeData(
             primarySwatch: Colors.purple,
             fontFamily: 'Lato',
           ).copyWith(
-            colorScheme: ThemeData().colorScheme.copyWith(
-                  secondary: Colors.deepOrange,
-                ),
-          ),
-          home: _auth.isAuth
-              ? const ProductsOverviewScreen()
-              : FutureBuilder(
-                  future: _auth.tryAutoLogin(),
-                  builder: (_, _authResultSnapshot) =>
-                      _authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? const SplashScreen()
-                          : const AuthScreen(),
-                ),
+              colorScheme: ThemeData()
+                  .colorScheme
+                  .copyWith(secondary: Colors.deepOrange)),
+          home:
+              auth.isAuth ? const ProductsOverviewScreen() : const AuthScreen(),
           routes: {
-            ProductDetailScreen.routeName: (_) => const ProductDetailScreen(),
-            CartScreen.routeName: (_) => const CartScreen(),
-            OrdersScreen.routeName: (_) => const OrdersScreen(),
-            UserProductsScreen.routeName: (_) => const UserProductsScreen(),
-            EditProductScreen.routeName: (_) => const EditProductScreen(),
+            ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => const CartScreen(),
+            OrdersScreen.routeName: (ctx) => const OrdersScreen(),
+            UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => const EditProductScreen(),
           },
         ),
       ),

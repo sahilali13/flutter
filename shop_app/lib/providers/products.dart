@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
-
-import '../providers/product.dart';
+import './product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
@@ -30,8 +29,9 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProducts([bool _filterByUser = false]) async {
     final _filterString =
         _filterByUser ? 'orderBy="creatorId"&equalTo="$_userId"' : '';
-    var _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-        '/products.json?auth=$_authToken&$_filterString');
+    var _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products.json?auth=$_authToken&$_filterString');
+
     try {
       final _response = await http.get(_url);
       final _extractedData =
@@ -40,8 +40,9 @@ class Products with ChangeNotifier {
       if (_extractedData == null) {
         return;
       }
-      _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-          '/userFavorites/$_userId.json?auth=$_authToken');
+      _url = Uri.parse(
+          'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
+
       final _favoriteResponse = await http.get(_url);
       final _favoriteData = json.decode(_favoriteResponse.body);
       final List<Product> _loadedProducts = [];
@@ -58,14 +59,14 @@ class Products with ChangeNotifier {
       });
       _items = _loadedProducts;
       notifyListeners();
-    } catch (_error) {
+    } catch (error) {
       rethrow;
     }
   }
 
   Future<void> addProduct(Product _product) async {
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-        '/products.json?auth=$_authToken');
+    final _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products.json?auth=$_authToken');
     try {
       final _response = await http.post(
         _url,
@@ -85,8 +86,11 @@ class Products with ChangeNotifier {
         id: json.decode(_response.body)['name'],
       );
       _items.add(_newProduct);
+
       notifyListeners();
     } catch (_error) {
+      // ignore: avoid_print
+      print(_error);
       rethrow;
     }
   }
@@ -94,24 +98,29 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String? _id, Product _newProduct) async {
     final _prodIndex = _items.indexWhere((_prod) => _prod.id == _id);
     if (_prodIndex >= 0) {
-      final _url = Uri.https(
-          'flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-          '/products/$_id.json?auth=$_authToken');
-      await http.patch(_url,
-          body: json.encode({
-            'title': _newProduct.title,
-            'description': _newProduct.description,
-            'imageUrl': _newProduct.imageUrl,
-            'price': _newProduct.price
-          }));
+      final _url = Uri.parse(
+          'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products/$_id.json?auth=$_authToken');
+      await http.patch(
+        _url,
+        body: json.encode({
+          'title': _newProduct.title,
+          'description': _newProduct.description,
+          'imageUrl': _newProduct.imageUrl,
+          'price': _newProduct.price
+        }),
+      );
       _items[_prodIndex] = _newProduct;
       notifyListeners();
-    } else {}
+    } else {
+      // ignore: avoid_print
+      print('...');
+    }
   }
 
-  Future<void> deleteProduct(String _id) async {
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-        '/products/$_id.json?auth=$_authToken');
+  Future<void> deleteProduct(String? _id) async {
+    final _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/products/$_id.json?auth=$_authToken');
+
     final _existingProductIndex = _items.indexWhere((_prod) => _prod.id == _id);
     Product? _existingProduct = _items[_existingProductIndex];
     _items.removeAt(_existingProductIndex);

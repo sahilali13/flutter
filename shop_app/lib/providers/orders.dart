@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../providers/cart.dart';
+import './cart.dart';
 
 class OrderItem {
   final String id;
@@ -31,8 +31,9 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com',
-        '/orders/$_userId.json?auth=$_authToken');
+    final _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken');
+
     final _response = await http.get(_url);
     final List<OrderItem> _loadedOrders = [];
     final _extractedData = json.decode(_response.body) as Map<String, dynamic>;
@@ -64,8 +65,9 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> _cartProducts, double _total) async {
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-        '/orders/$_userId.json?auth=$_authToken');
+    final _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken');
+
     final _timestamp = DateTime.now();
     final _response = await http.post(
       _url,
@@ -73,11 +75,11 @@ class Orders with ChangeNotifier {
         'amount': _total,
         'dateTime': _timestamp.toIso8601String(),
         'products': _cartProducts
-            .map((_cartProduct) => {
-                  'id': _cartProduct.id,
-                  'title': _cartProduct.title,
-                  'quantity': _cartProduct.quantity,
-                  'price': _cartProduct.price,
+            .map((cp) => {
+                  'id': cp.id,
+                  'title': cp.title,
+                  'quantity': cp.quantity,
+                  'price': cp.price,
                 })
             .toList(),
       }),

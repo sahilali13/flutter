@@ -3,12 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/auth.dart';
 import '../models/http_exception.dart';
 
-import '../providers/auth.dart';
-
 // ignore: constant_identifier_names
-enum AuthMode { Signup, Login }
+enum _AuthMode { Signup, Login }
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -17,7 +16,8 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -36,8 +36,8 @@ class AuthScreen extends StatelessWidget {
           ),
           SingleChildScrollView(
             child: SizedBox(
-              height: _deviceSize.height,
-              width: _deviceSize.width,
+              height: deviceSize.height,
+              width: deviceSize.width,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,7 +72,7 @@ class AuthScreen extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    flex: _deviceSize.width > 600 ? 2 : 1,
+                    flex: deviceSize.width > 600 ? 2 : 1,
                     child: const AuthCard(),
                   ),
                 ],
@@ -96,7 +96,7 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  AuthMode _authMode = AuthMode.Login;
+  _AuthMode _authMode = _AuthMode.Login;
   final Map<String, String?> _authData = {
     'email': '',
     'password': '',
@@ -104,19 +104,19 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _showErrorDialog(String _message) {
+  void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (_ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         title: const Text('An Error Occurred!'),
-        content: Text(_message),
+        content: Text(message),
         actions: <Widget>[
           TextButton(
-            onPressed: () {
-              Navigator.of(_ctx).pop();
-            },
             child: const Text('Okay'),
-          )
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
         ],
       ),
     );
@@ -124,6 +124,7 @@ class _AuthCardState extends State<AuthCard> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
+      // Invalid!
       return;
     }
     _formKey.currentState!.save();
@@ -131,35 +132,37 @@ class _AuthCardState extends State<AuthCard> {
       _isLoading = true;
     });
     try {
-      if (_authMode == AuthMode.Login) {
+      if (_authMode == _AuthMode.Login) {
+        // Log user in
         await Provider.of<Auth>(context, listen: false).login(
           _authData['email'],
           _authData['password'],
         );
       } else {
+        // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
           _authData['email'],
           _authData['password'],
         );
       }
-    } on HttpException catch (_error) {
-      var _errorMessage = 'Authentication failed';
-      if (_error.toString().contains('EMAIL_EXISTS')) {
-        _errorMessage = 'This email address is already in use.';
-      } else if (_error.toString().contains('INVALID_EMAIL')) {
-        _errorMessage = 'This is not a valid email address';
-      } else if (_error.toString().contains('WEAK_PASSWORD')) {
-        _errorMessage = 'This password is too weak.';
-      } else if (_error.toString().contains('EMAIL_NOT_FOUND')) {
-        _errorMessage = 'Could not find a user with that email.';
-      } else if (_error.toString().contains('INVALID_PASSWORD')) {
-        _errorMessage = 'Invalid password.';
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
       }
-      _showErrorDialog(_errorMessage);
-    } catch (_error) {
-      const _errorMessage =
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      const errorMessage =
           'Could not authenticate you. Please try again later.';
-      _showErrorDialog(_errorMessage);
+      _showErrorDialog(errorMessage);
     }
 
     setState(() {
@@ -168,30 +171,30 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == _AuthMode.Login) {
       setState(() {
-        _authMode = AuthMode.Signup;
+        _authMode = _AuthMode.Signup;
       });
     } else {
       setState(() {
-        _authMode = AuthMode.Login;
+        _authMode = _AuthMode.Login;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
-        width: _deviceSize.width * 0.75,
+        height: _authMode == _AuthMode.Signup ? 320 : 260,
+        constraints: BoxConstraints(
+            minHeight: _authMode == _AuthMode.Signup ? 320 : 260),
+        width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -201,38 +204,37 @@ class _AuthCardState extends State<AuthCard> {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (_value) {
-                    if (_value!.isEmpty || !_value.contains('@')) {
+                  validator: (value) {
+                    if (value!.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
-                    return null;
                   },
-                  onSaved: (_value) {
-                    _authData['email'] = _value;
+                  onSaved: (value) {
+                    _authData['email'] = value;
                   },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   controller: _passwordController,
-                  validator: (_value) {
-                    if (_value!.isEmpty || _value.length < 5) {
+                  validator: (value) {
+                    if (value!.isEmpty || value.length < 5) {
                       return 'Password is too short!';
                     }
                   },
-                  onSaved: (_value) {
-                    _authData['password'] = _value;
+                  onSaved: (value) {
+                    _authData['password'] = value;
                   },
                 ),
-                if (_authMode == AuthMode.Signup)
+                if (_authMode == _AuthMode.Signup)
                   TextFormField(
-                    enabled: _authMode == AuthMode.Signup,
+                    enabled: _authMode == _AuthMode.Signup,
                     decoration:
                         const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
-                    validator: _authMode == AuthMode.Signup
-                        ? (_value) {
-                            if (_value != _passwordController.text) {
+                    validator: _authMode == _AuthMode.Signup
+                        ? (value) {
+                            if (value != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
                           }
@@ -246,12 +248,13 @@ class _AuthCardState extends State<AuthCard> {
                 else
                   ElevatedButton(
                     onPressed: _submit,
-                    child:
-                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                    child: Text(
+                        _authMode == _AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<OutlinedBorder?>(
                         RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
                         const EdgeInsets.symmetric(
@@ -268,7 +271,7 @@ class _AuthCardState extends State<AuthCard> {
                 TextButton(
                   onPressed: _switchAuthMode,
                   child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                      '${_authMode == _AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
                       const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),

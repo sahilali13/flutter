@@ -29,8 +29,9 @@ class Product with ChangeNotifier {
     final _oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com/',
-        '/userFavorites/$_userId/$id.json?auth=$_token');
+    final _url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/userFavorites/$_userId/$id.json?auth=$_token');
+
     try {
       final _response = await http.put(
         _url,
@@ -41,7 +42,7 @@ class Product with ChangeNotifier {
       if (_response.statusCode >= 400) {
         _setFavValue(_oldStatus);
       }
-    } catch (_error) {
+    } catch (error) {
       _setFavValue(_oldStatus);
     }
   }

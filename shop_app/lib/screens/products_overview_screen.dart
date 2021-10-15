@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart.dart';
-import '../providers/products.dart';
-
-import '../screens/cart_screen.dart';
-
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
+import '../providers/cart.dart';
+import './cart_screen.dart';
+import '../providers/products.dart';
 
-enum FilterOptions {
-  // ignore: constant_identifier_names
-  Favorites,
-  // ignore: constant_identifier_names
-  All,
-}
+// ignore: constant_identifier_names
+enum FilterOptions { Favorites, All }
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
@@ -57,9 +51,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: const Text('MyShop'),
         actions: <Widget>[
           PopupMenuButton(
-            onSelected: (FilterOptions _selectedValue) {
+            onSelected: (FilterOptions selectedValue) {
               setState(() {
-                if (_selectedValue == FilterOptions.Favorites) {
+                if (selectedValue == FilterOptions.Favorites) {
                   _showOnlyFavorites = true;
                 } else {
                   _showOnlyFavorites = false;
@@ -82,8 +76,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
           Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
-              color: Theme.of(context).colorScheme.secondary,
-              child: ch,
+              child: ch as Widget,
               value: cart.itemCount.toString(),
             ),
             child: IconButton(

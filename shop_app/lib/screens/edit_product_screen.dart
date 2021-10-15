@@ -44,16 +44,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final _productId = ModalRoute.of(context)!.settings.arguments as String;
+      final productId = ModalRoute.of(context)!.settings.arguments as String;
       // ignore: unnecessary_null_comparison
-      if (_productId != null) {
+      if (productId != null) {
         _editedProduct =
-            Provider.of<Products>(context, listen: false).findById(_productId);
+            Provider.of<Products>(context, listen: false).findById(productId);
         _initValues = {
           'title': _editedProduct.title as String,
           'description': _editedProduct.description as String,
           'price': _editedProduct.price.toString(),
-          // 'imageUrl': _editedProduct.imageUrl,
           'imageUrl': '',
         };
         _imageUrlController.text = _editedProduct.imageUrl as String;
@@ -87,8 +86,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> _saveForm() async {
-    final _isValid = _form.currentState!.validate();
-    if (!_isValid) {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
       return;
     }
     _form.currentState!.save();
@@ -102,18 +101,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
       try {
         await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
-      } catch (_error) {
+      } catch (error) {
         await showDialog(
           context: context,
-          builder: (_ctx) => AlertDialog(
+          builder: (ctx) => AlertDialog(
             title: const Text('An error occurred!'),
             content: const Text('Something went wrong.'),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(_ctx).pop();
-                },
                 child: const Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
               ),
             ],
           ),
@@ -124,7 +123,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = false;
     });
     Navigator.of(context).pop();
-    // Navigator.of(context).pop();
   }
 
   @override
@@ -156,15 +154,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_priceFocusNode);
                       },
-                      validator: (_value) {
-                        if (_value!.isEmpty) {
+                      validator: (value) {
+                        if (value!.isEmpty) {
                           return 'Please provide a value.';
                         }
                         return null;
                       },
-                      onSaved: (_value) {
+                      onSaved: (value) {
                         _editedProduct = Product(
-                            title: _value,
+                            title: value,
                             price: _editedProduct.price,
                             description: _editedProduct.description,
                             imageUrl: _editedProduct.imageUrl,
@@ -182,22 +180,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         FocusScope.of(context)
                             .requestFocus(_descriptionFocusNode);
                       },
-                      validator: (_value) {
-                        if (_value!.isEmpty) {
+                      validator: (value) {
+                        if (value!.isEmpty) {
                           return 'Please enter a price.';
                         }
-                        if (double.tryParse(_value) == null) {
+                        if (double.tryParse(value) == null) {
                           return 'Please enter a valid number.';
                         }
-                        if (double.parse(_value) <= 0) {
+                        if (double.parse(value) <= 0) {
                           return 'Please enter a number greater than zero.';
                         }
                         return null;
                       },
-                      onSaved: (_value) {
+                      onSaved: (value) {
                         _editedProduct = Product(
                             title: _editedProduct.title,
-                            price: double.parse(_value as String),
+                            price: double.parse(value as String),
                             description: _editedProduct.description,
                             imageUrl: _editedProduct.imageUrl,
                             id: _editedProduct.id,
@@ -211,20 +209,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       maxLines: 3,
                       keyboardType: TextInputType.multiline,
                       focusNode: _descriptionFocusNode,
-                      validator: (_value) {
-                        if (_value!.isEmpty) {
+                      validator: (value) {
+                        if (value!.isEmpty) {
                           return 'Please enter a description.';
                         }
-                        if (_value.length < 10) {
+                        if (value.length < 10) {
                           return 'Should be at least 10 characters long.';
                         }
                         return null;
                       },
-                      onSaved: (_value) {
+                      onSaved: (value) {
                         _editedProduct = Product(
                           title: _editedProduct.title,
                           price: _editedProduct.price,
-                          description: _value,
+                          description: value,
                           imageUrl: _editedProduct.imageUrl,
                           id: _editedProduct.id,
                           isFavorite: _editedProduct.isFavorite,
@@ -267,27 +265,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             onFieldSubmitted: (_) {
                               _saveForm();
                             },
-                            validator: (_value) {
-                              if (_value!.isEmpty) {
+                            validator: (value) {
+                              if (value!.isEmpty) {
                                 return 'Please enter an image URL.';
                               }
-                              if (!_value.startsWith('http') &&
-                                  !_value.startsWith('https')) {
+                              if (!value.startsWith('http') &&
+                                  !value.startsWith('https')) {
                                 return 'Please enter a valid URL.';
                               }
-                              if (!_value.endsWith('.png') &&
-                                  !_value.endsWith('.jpg') &&
-                                  !_value.endsWith('.jpeg')) {
+                              if (!value.endsWith('.png') &&
+                                  !value.endsWith('.jpg') &&
+                                  !value.endsWith('.jpeg')) {
                                 return 'Please enter a valid image URL.';
                               }
                               return null;
                             },
-                            onSaved: (_value) {
+                            onSaved: (value) {
                               _editedProduct = Product(
                                 title: _editedProduct.title,
                                 price: _editedProduct.price,
                                 description: _editedProduct.description,
-                                imageUrl: _value,
+                                imageUrl: value,
                                 id: _editedProduct.id,
                                 isFavorite: _editedProduct.isFavorite,
                               );
