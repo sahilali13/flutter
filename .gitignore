@@ -244,3 +244,4 @@ the_basics/web/index.html
 the_basics/web/manifest.json
 the_basics/web/icons/Icon-192.png
 the_basics/web/icons/Icon-512.png
+shop_app/lib/providers/auth.dart
