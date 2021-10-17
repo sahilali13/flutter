@@ -1,31 +1,25 @@
-enum Complexity {
-  simple,
-  challenging,
-  hard,
-}
+// ignore: constant_identifier_names
+enum Complexity { Simple, Challenging, Hard }
 
-enum Affordability {
-  affordable,
-  pricey,
-  luxurious,
-}
+// ignore: constant_identifier_names
+enum Affordability { Affordable, Pricey, Luxurious }
 
 class Meal {
-  late final String id;
-  late final List<String> categories;
-  late final String title;
-  late final String imageUrl;
-  late final List<String> ingredients;
-  late final List<String> steps;
-  late final int duration;
-  late final Complexity complexity;
-  late final Affordability affordability;
-  late final bool isGlutenFree;
-  late final bool isLactoseFree;
-  late final bool isVegan;
-  late final bool isVegetarian;
+  final String id;
+  final List<String> categories;
+  final String title;
+  final String imageUrl;
+  final List<String> ingredients;
+  final List<String> steps;
+  final int duration;
+  final Complexity complexity;
+  final Affordability affordability;
+  final bool isGlutenFree;
+  final bool isLactoseFree;
+  final bool isVegan;
+  final bool isVegetarian;
 
-  Meal({
+  const Meal({
     required this.id,
     required this.categories,
     required this.title,

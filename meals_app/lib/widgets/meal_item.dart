@@ -1,166 +1,149 @@
 import 'package:flutter/material.dart';
 
 import '../models/meal.dart';
-import '../pages/meal_detail_page.dart';
+import '../screens/meal_detail_screen.dart';
 
 class MealItem extends StatelessWidget {
-  final String _id;
-  final String _title;
-  final String _imageUrl;
-  final int _duration;
-  final Complexity _complexity;
-  final Affordability _affordability;
+  final String id;
+  final String title;
+  final String imageUrl;
+  final int duration;
+  final Complexity complexity;
+  final Affordability affordability;
 
-  // ignore: use_key_in_widget_constructors
   const MealItem({
-    required id,
-    required affordability,
-    required complexity,
-    required duration,
-    required imageUrl,
-    required title,
-  })  : _title = title,
-        _imageUrl = imageUrl,
-        _duration = duration,
-        _complexity = complexity,
-        _affordability = affordability,
-        _id = id;
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.imageUrl,
+    required this.affordability,
+    required this.complexity,
+    required this.duration,
+  }) : super(key: key);
 
   String get _complexityText {
-    switch (_complexity) {
-      case Complexity.simple:
+    switch (complexity) {
+      case Complexity.Simple:
         return 'Simple';
-      case Complexity.challenging:
+      case Complexity.Challenging:
         return 'Challenging';
-      case Complexity.hard:
-        return 'hard';
+      case Complexity.Hard:
+        return 'Hard';
       default:
         return 'Unknown';
     }
   }
 
   String get _affordabilityText {
-    switch (_affordability) {
-      case Affordability.affordable:
+    switch (affordability) {
+      case Affordability.Affordable:
         return 'Affordable';
-      case Affordability.luxurious:
-        return 'Luxurious';
-      case Affordability.pricey:
+      case Affordability.Pricey:
         return 'Pricey';
+      case Affordability.Luxurious:
+        return 'Expensive';
       default:
         return 'Unknown';
     }
   }
 
-  void _selectMeal(BuildContext _ctx) {
-    Navigator.of(_ctx).pushNamed(
-      MealDetailPage.routeName,
-      arguments: _id,
+  void selectMeal({required BuildContext context}) {
+    Navigator.of(context).pushNamed(
+      MealDetailScreen.routeName,
+      arguments: id,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    var _stackImage = ClipRRect(
-      borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-      child: Image.network(
-        _imageUrl,
-        height: 250,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      ),
-    );
-
-    var _stackText = Positioned(
-      bottom: 20,
-      right: 20,
-      child: Container(
-        width: 220,
-        color: Colors.black54,
-        padding: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 10,
-        ),
-        child: Text(
-          _title,
-          style: const TextStyle(
-            fontSize: 26,
-            color: Colors.white,
-          ),
-          softWrap: true,
-          overflow: TextOverflow.fade,
-        ),
-      ),
-    );
-
-    var _cardImage = Stack(
-      children: <Widget>[
-        _stackImage,
-        _stackText,
-      ],
-    );
-
-    var _cardTextDuration = Row(
-      children: [
-        const Icon(
-          Icons.schedule,
-        ),
-        const SizedBox(
-          width: 6,
-        ),
-        Text('$_duration min'),
-      ],
-    );
-
-    var _cardTextComplexity = Row(
-      children: [
-        const Icon(
-          Icons.work,
-        ),
-        const SizedBox(
-          width: 6,
-        ),
-        Text(_complexityText),
-      ],
-    );
-
-    var _cardTextAddordability = Row(
-      children: [
-        const Icon(
-          Icons.account_balance_wallet,
-        ),
-        const SizedBox(
-          width: 6,
-        ),
-        Text(_affordabilityText),
-      ],
-    );
-
-    var _cardText = Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          _cardTextDuration,
-          _cardTextComplexity,
-          _cardTextAddordability,
-        ],
-      ),
-    );
-
     return InkWell(
-      onTap: () => _selectMeal(context),
+      onTap: () => selectMeal(context: context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        elevation: 5,
+        elevation: 4,
         margin: const EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            _cardImage,
-            _cardText,
+            Stack(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: Image.network(
+                    imageUrl,
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  right: 10,
+                  child: Container(
+                    width: 300,
+                    color: Colors.black54,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 20,
+                    ),
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 26,
+                        color: Colors.white,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.schedule,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text('$duration min'),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.work,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(_complexityText),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.attach_money,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(_affordabilityText),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

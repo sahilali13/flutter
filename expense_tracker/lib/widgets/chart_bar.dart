@@ -5,11 +5,16 @@ class ChartBar extends StatelessWidget {
   final double _spendingAmount;
   final double _spendingPctOfTotal;
 
-  const ChartBar(this._label, this._spendingAmount, this._spendingPctOfTotal);
+  const ChartBar({
+    required label,
+    required spendingAmount,
+    required spendingPctOfTotal,
+  })  : _label = label,
+        _spendingAmount = spendingAmount,
+        _spendingPctOfTotal = spendingPctOfTotal;
 
   @override
   Widget build(BuildContext context) {
-    final _themeContext = Theme.of(context);
     return LayoutBuilder(
       builder: (_ctx, _constraints) {
         return Column(
@@ -17,9 +22,7 @@ class ChartBar extends StatelessWidget {
             Container(
               height: _constraints.maxHeight * 0.15,
               child: FittedBox(
-                child: Text(
-                  '\$${_spendingAmount.toStringAsFixed(0)}',
-                ),
+                child: Text('\$${_spendingAmount.toStringAsFixed(0)}'),
               ),
             ),
             SizedBox(
@@ -32,10 +35,7 @@ class ChartBar extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
+                      border: Border.all(color: Colors.grey, width: 1.0),
                       color: const Color.fromRGBO(220, 220, 220, 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -44,7 +44,7 @@ class ChartBar extends StatelessWidget {
                     heightFactor: _spendingPctOfTotal,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _themeContext.primaryColor,
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -58,9 +58,7 @@ class ChartBar extends StatelessWidget {
             Container(
               height: _constraints.maxHeight * 0.15,
               child: FittedBox(
-                child: Text(
-                  _label,
-                ),
+                child: Text(_label),
               ),
             ),
           ],

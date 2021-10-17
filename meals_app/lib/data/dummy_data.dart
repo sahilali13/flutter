@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/category.dart';
 import '../models/meal.dart';
 
-const dummyCategories = [
+// ignore: constant_identifier_names
+const DUMMY_CATEGORIES = [
   Category(
     id: 'c1',
     title: 'Italian',
@@ -56,7 +57,8 @@ const dummyCategories = [
   ),
 ];
 
-final dummyMeals = [
+// ignore: constant_identifier_names
+const DUMMY_MEALS = [
   Meal(
     id: 'm1',
     categories: [
@@ -64,8 +66,8 @@ final dummyMeals = [
       'c2',
     ],
     title: 'Spaghetti with Tomato Sauce',
-    affordability: Affordability.affordable,
-    complexity: Complexity.simple,
+    affordability: Affordability.Affordable,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg',
     duration: 20,
@@ -97,8 +99,8 @@ final dummyMeals = [
       'c2',
     ],
     title: 'Toast Hawaii',
-    affordability: Affordability.affordable,
-    complexity: Complexity.simple,
+    affordability: Affordability.Affordable,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg',
     duration: 10,
@@ -126,8 +128,8 @@ final dummyMeals = [
       'c3',
     ],
     title: 'Classic Hamburger',
-    affordability: Affordability.pricey,
-    complexity: Complexity.simple,
+    affordability: Affordability.Pricey,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg',
     duration: 45,
@@ -157,8 +159,8 @@ final dummyMeals = [
       'c4',
     ],
     title: 'Wiener Schnitzel',
-    affordability: Affordability.luxurious,
-    complexity: Complexity.challenging,
+    affordability: Affordability.Luxurious,
+    complexity: Complexity.Challenging,
     imageUrl:
         'https://cdn.pixabay.com/photo/2018/03/31/19/29/schnitzel-3279045_1280.jpg',
     duration: 60,
@@ -194,8 +196,8 @@ final dummyMeals = [
       'c10',
     ],
     title: 'Salad with Smoked Salmon',
-    affordability: Affordability.luxurious,
-    complexity: Complexity.simple,
+    affordability: Affordability.Luxurious,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://cdn.pixabay.com/photo/2016/10/25/13/29/smoked-salmon-salad-1768890_1280.jpg',
     duration: 15,
@@ -229,8 +231,8 @@ final dummyMeals = [
       'c10',
     ],
     title: 'Delicious Orange Mousse',
-    affordability: Affordability.affordable,
-    complexity: Complexity.hard,
+    affordability: Affordability.Affordable,
+    complexity: Complexity.Hard,
     imageUrl:
         'https://cdn.pixabay.com/photo/2017/05/01/05/18/pastry-2274750_1280.jpg',
     duration: 240,
@@ -264,8 +266,8 @@ final dummyMeals = [
       'c7',
     ],
     title: 'Pancakes',
-    affordability: Affordability.affordable,
-    complexity: Complexity.simple,
+    affordability: Affordability.Affordable,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://cdn.pixabay.com/photo/2018/07/10/21/23/pancake-3529653_1280.jpg',
     duration: 20,
@@ -295,8 +297,8 @@ final dummyMeals = [
       'c8',
     ],
     title: 'Creamy Indian Chicken Curry',
-    affordability: Affordability.pricey,
-    complexity: Complexity.challenging,
+    affordability: Affordability.Pricey,
+    complexity: Complexity.Challenging,
     imageUrl:
         'https://cdn.pixabay.com/photo/2018/06/18/16/05/indian-food-3482749_1280.jpg',
     duration: 35,
@@ -328,8 +330,8 @@ final dummyMeals = [
       'c9',
     ],
     title: 'Chocolate Souffle',
-    affordability: Affordability.affordable,
-    complexity: Complexity.hard,
+    affordability: Affordability.Affordable,
+    complexity: Complexity.Hard,
     imageUrl:
         'https://cdn.pixabay.com/photo/2014/08/07/21/07/souffle-412785_1280.jpg',
     duration: 45,
@@ -379,8 +381,8 @@ final dummyMeals = [
       'c10',
     ],
     title: 'Asparagus Salad with Cherry Tomatoes',
-    affordability: Affordability.luxurious,
-    complexity: Complexity.simple,
+    affordability: Affordability.Luxurious,
+    complexity: Complexity.Simple,
     imageUrl:
         'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
     duration: 30,

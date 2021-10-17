@@ -6,14 +6,14 @@
     "configurations": [
 
         {
-            "name": "great_places",
-            "cwd": "great_places",
+            "name": "shop_app",
+            "cwd": "shop_app",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "great_places (profile mode)",
-            "cwd": "great_places",
+            "name": "shop_app (profile mode)",
+            "cwd": "shop_app",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
