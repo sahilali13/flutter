@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,26 +25,36 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<GreatPlaces>(
-        child: const Center(
-          child: Text(
-            'Got no places yet, start adding some!',
-          ),
-        ),
-        builder: (_ctx, _greatPlaces, _child) => _greatPlaces.items.isEmpty
-            ? _child as Widget
-            : ListView.builder(
-                itemCount: _greatPlaces.items.length,
-                itemBuilder: (_ctx, _index) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(
-                      _greatPlaces.items[_index].image,
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(context, listen: false)
+            .fetchAndSetPlaces(),
+        builder: (_ctx, _snapshot) =>
+            _snapshot.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                     ),
+                  )
+                : Consumer<GreatPlaces>(
+                    child: const Center(
+                      child: Text('Got no places yet, start adding some!'),
+                    ),
+                    builder: (_ctx, _greatPlaces, _child) =>
+                        _greatPlaces.items.isEmpty
+                            ? _child as Widget
+                            : ListView.builder(
+                                itemCount: _greatPlaces.items.length,
+                                itemBuilder: (_ctx, _index) => ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: FileImage(
+                                      _greatPlaces.items[_index].image as File,
+                                    ),
+                                  ),
+                                  title: Text(_greatPlaces.items[_index].title),
+                                  onTap: () {},
+                                ),
+                              ),
                   ),
-                  title: Text(_greatPlaces.items[_index].title),
-                  onTap: () {},
-                ),
-              ),
       ),
     );
   }

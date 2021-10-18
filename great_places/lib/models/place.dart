@@ -16,7 +16,7 @@ class Place {
   final String id;
   final String title;
   final PlaceLocation? location;
-  final File image;
+  final File? image;
 
   Place({
     required this.id,

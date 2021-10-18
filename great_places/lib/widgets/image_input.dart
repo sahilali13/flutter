@@ -8,7 +8,9 @@ import 'package:path_provider/path_provider.dart' as syspaths;
 class ImageInput extends StatefulWidget {
   final Function _onSelectImage;
 
-  const ImageInput(this._onSelectImage, {Key? key}) : super(key: key);
+  const ImageInput({Key? key, required onSelectImage})
+      : _onSelectImage = onSelectImage,
+        super(key: key);
 
   @override
   _ImageInputState createState() => _ImageInputState();
@@ -19,26 +21,25 @@ class _ImageInputState extends State<ImageInput> {
   File? _storedImage = null;
 
   Future<void> _takePicture() async {
-    var _imagePicker = ImagePicker();
-    XFile _imageFile = await _imagePicker.pickImage(
+    final _imagePicker = ImagePicker();
+    final _imageFile = await _imagePicker.pickImage(
       source: ImageSource.camera,
       maxWidth: 600,
-    ) as XFile;
-    final _finalImageFile = File(_imageFile.path);
+    );
+    final _finalImageFile = File(_imageFile!.path);
 
     // ignore: unnecessary_null_comparison
-    if (_finalImageFile == null) {
+    if (_imageFile == null) {
       return;
     }
     setState(() {
       _storedImage = _finalImageFile;
     });
     final _appDir = await syspaths.getApplicationDocumentsDirectory();
-    final _fileName = path.basename(_finalImageFile.path);
-    final _savedImage = await _finalImageFile.copy(
-      '${_appDir.path}/$_fileName',
-    );
-    widget._onSelectImage(_savedImage);
+    final _fileName = path.basename(_imageFile.path);
+    final _savedImage =
+        await _finalImageFile.copy('${_appDir.path}/$_fileName');
+    widget._onSelectImage(pickedImage: _savedImage);
   }
 
   @override
@@ -51,7 +52,6 @@ class _ImageInputState extends State<ImageInput> {
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey),
           ),
-          // ignore: unnecessary_null_comparison
           child: _storedImage != null
               ? Image.file(
                   _storedImage as File,
@@ -71,12 +71,12 @@ class _ImageInputState extends State<ImageInput> {
           child: TextButton.icon(
             icon: const Icon(Icons.camera),
             label: const Text('Take Picture'),
-            onPressed: _takePicture,
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color?>(
                 Theme.of(context).primaryColor,
               ),
             ),
+            onPressed: _takePicture,
           ),
         ),
       ],

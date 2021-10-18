@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:great_places/widgets/location_input.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/great_places.dart';
@@ -17,14 +18,16 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
-  late File _pickedImage;
+  // ignore: avoid_init_to_null
+  File? _pickedImage = null;
 
-  void _selectImage(File _pickedImage1) {
-    _pickedImage = _pickedImage1;
+  void _selectImage({
+    required File pickedImage,
+  }) {
+    _pickedImage = pickedImage;
   }
 
   void _savePlace() {
-    // ignore: unnecessary_null_comparison
     if (_titleController.text.isEmpty || _pickedImage == null) {
       return;
     }
@@ -47,7 +50,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: <Widget>[
                     TextField(
@@ -57,24 +60,30 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    ImageInput(_selectImage),
+                    ImageInput(onSelectImage: _selectImage),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const LocationInput(),
                   ],
                 ),
               ),
             ),
           ),
           ElevatedButton.icon(
+            onPressed: _savePlace,
             icon: const Icon(Icons.add),
             label: const Text('Add Place'),
-            onPressed: _savePlace,
             style: ButtonStyle(
-              elevation: MaterialStateProperty.all<double?>(0.0),
+              elevation: MaterialStateProperty.all<double?>(
+                0.0,
+              ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               backgroundColor: MaterialStateProperty.all<Color?>(
                 Theme.of(context).colorScheme.secondary,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
