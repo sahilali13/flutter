@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Personal Expenses',
       theme: ThemeData(
         primarySwatch: Colors.purple,
@@ -195,10 +196,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final _mediaQuery = MediaQuery.of(context);
-    final _isLandscape = _mediaQuery.orientation == Orientation.landscape;
+    final MediaQueryData _mediaQuery = MediaQuery.of(context);
+    final bool _isLandscape = _mediaQuery.orientation == Orientation.landscape;
     final PreferredSizeWidget _appBar = _buildAppBar() as PreferredSizeWidget;
-    final _txListWidget = Container(
+    final Container _txListWidget = Container(
       height: (_mediaQuery.size.height -
               _appBar.preferredSize.height -
               _mediaQuery.padding.top) *
@@ -208,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         deleteTx: _deleteTransaction,
       ),
     );
-    final pageBody = SafeArea(
+    final SafeArea pageBody = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -64,9 +64,7 @@ class _ImageInputState extends State<ImageInput> {
                 ),
           alignment: Alignment.center,
         ),
-        const SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         Expanded(
           child: TextButton.icon(
             icon: const Icon(Icons.camera),

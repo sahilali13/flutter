@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -23,62 +21,62 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-  final String? _authToken;
-  final String? _userId;
+  final String? authToken;
+  final String? userId;
 
-  Orders(this._authToken, this._userId, this._orders);
+  Orders(this.authToken, this.userId, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
   Future<void> fetchAndSetOrders() async {
-    final _url = Uri.parse(
-        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken');
-    final _response = await http.get(_url);
-    final List<OrderItem> _loadedOrders = [];
-    final _extractedData = json.decode(_response.body) as Map<String, dynamic>;
-    if (_extractedData == null) {
+    final url = Uri.parse(
+        'https://flutter-update-b8d2b-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken');
+    final response = await http.get(url);
+    final List<OrderItem> loadedOrders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    // ignore: unnecessary_null_comparison
+    if (extractedData == null) {
       return;
     }
-    _extractedData.forEach((_orderId, _orderData) {
-      _loadedOrders.add(
+    extractedData.forEach((orderId, orderData) {
+      loadedOrders.add(
         OrderItem(
-          id: _orderId,
-          amount: _orderData['amount'],
-          dateTime: DateTime.parse(_orderData['dateTime']),
-          products: (_orderData['products'] as List<dynamic>)
+          id: orderId,
+          amount: orderData['amount'],
+          dateTime: DateTime.parse(orderData['dateTime']),
+          products: (orderData['products'] as List<dynamic>)
               .map(
-                (_item) => CartItem(
-                  id: _item['id'],
-                  price: _item['price'],
-                  quantity: _item['quantity'],
-                  title: _item['title'],
+                (item) => CartItem(
+                  id: item['id'],
+                  price: item['price'],
+                  quantity: item['quantity'],
+                  title: item['title'],
                 ),
               )
               .toList(),
         ),
       );
     });
-    _orders = _loadedOrders.reversed.toList();
+    _orders = loadedOrders.reversed.toList();
     notifyListeners();
   }
 
-  Future<void> addOrder(List<CartItem> _cartProducts, double _total) async {
-    final _url = Uri.https('flutter-update-b8d2b-default-rtdb.firebaseio.com',
-        '/orders/$_userId.json?auth=$_authToken');
-    final _timestamp = DateTime.now();
+  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    final url = Uri.parse('[DATABASE_URL]/orders/$userId.json?auth=$authToken');
+    final timestamp = DateTime.now();
     final response = await http.post(
-      _url,
+      url,
       body: json.encode({
-        'amount': _total,
-        'dateTime': _timestamp.toIso8601String(),
-        'products': _cartProducts
-            .map((_cp) => {
-                  'id': _cp.id,
-                  'title': _cp.title,
-                  'quantity': _cp.quantity,
-                  'price': _cp.price,
+        'amount': total,
+        'dateTime': timestamp.toIso8601String(),
+        'products': cartProducts
+            .map((cp) => {
+                  'id': cp.id,
+                  'title': cp.title,
+                  'quantity': cp.quantity,
+                  'price': cp.price,
                 })
             .toList(),
       }),
@@ -87,9 +85,9 @@ class Orders with ChangeNotifier {
       0,
       OrderItem(
         id: json.decode(response.body)['name'],
-        amount: _total,
-        dateTime: _timestamp,
-        products: _cartProducts,
+        amount: total,
+        dateTime: timestamp,
+        products: cartProducts,
       ),
     );
     notifyListeners();

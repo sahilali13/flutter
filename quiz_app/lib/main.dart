@@ -44,8 +44,8 @@ class _MyAppState extends State<MyApp> {
       ],
     },
   ];
-  var _questionIndex = 0;
-  var _totalScore = 0;
+  int _questionIndex = 0;
+  int _totalScore = 0;
 
   void _resetQuiz() {
     setState(() {
@@ -65,9 +65,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('My First App'),
+          title: const Text('Quiz App'),
         ),
         body: _questionIndex < _questions.length
             ? Quiz(

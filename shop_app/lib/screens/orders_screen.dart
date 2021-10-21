@@ -19,20 +19,21 @@ class OrdersScreen extends StatelessWidget {
       drawer: const AppDrawer(),
       body: FutureBuilder(
         future: Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
-        builder: (_, _dataSnapshot) {
-          if (_dataSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+        builder: (ctx, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
           } else {
-            if (_dataSnapshot.error != null) {
+            if (dataSnapshot.error != null) {
               return const Center(
                 child: Text('An error occurred!'),
               );
             } else {
               return Consumer<Orders>(
-                builder: (_, _orderData, _child) => ListView.builder(
-                  itemCount: _orderData.orders.length,
-                  itemBuilder: (_, _index) =>
-                      OrderItem(_orderData.orders[_index]),
+                builder: (ctx, orderData, child) => ListView.builder(
+                  itemCount: orderData.orders.length,
+                  itemBuilder: (ctx, i) => OrderItem(orderData.orders[i]),
                 ),
               );
             }

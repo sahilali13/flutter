@@ -10,12 +10,11 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _productId =
-        ModalRoute.of(context)!.settings.arguments as String; // is the id!
-    final _loadedProduct = Provider.of<Products>(
+    final productId = ModalRoute.of(context)!.settings.arguments as String;
+    final loadedProduct = Provider.of<Products>(
       context,
       listen: false,
-    ).findById(_productId);
+    ).findById(productId);
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -23,11 +22,11 @@ class ProductDetailScreen extends StatelessWidget {
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(_loadedProduct.title as String),
+              title: Text(loadedProduct.title as String),
               background: Hero(
-                tag: _loadedProduct.id as Object,
+                tag: loadedProduct.id as Object,
                 child: Image.network(
-                  _loadedProduct.imageUrl as String,
+                  loadedProduct.imageUrl as String,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -38,28 +37,24 @@ class ProductDetailScreen extends StatelessWidget {
               [
                 const SizedBox(height: 10),
                 Text(
-                  '\$${_loadedProduct.price}',
+                  '\$${loadedProduct.price}',
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 20,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: double.infinity,
                   child: Text(
-                    _loadedProduct.description as String,
+                    loadedProduct.description as String,
                     textAlign: TextAlign.center,
                     softWrap: true,
                   ),
                 ),
-                const SizedBox(
-                  height: 800,
-                ),
+                const SizedBox(height: 800),
               ],
             ),
           ),

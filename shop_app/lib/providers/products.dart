@@ -1,16 +1,14 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
+
 import '../providers/product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
-
   final String? authToken;
   final String? userId;
 
@@ -36,6 +34,7 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      // ignore: unnecessary_null_comparison
       if (extractedData == null) {
         return;
       }
@@ -84,7 +83,6 @@ class Products with ChangeNotifier {
         id: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
-
       notifyListeners();
     } catch (error) {
       rethrow;

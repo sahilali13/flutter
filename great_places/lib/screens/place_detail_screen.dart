@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/great_places.dart';
+
 import '../screens/map_screen.dart';
 
 class PlaceDetailScreen extends StatelessWidget {
@@ -30,9 +31,7 @@ class PlaceDetailScreen extends StatelessWidget {
               width: double.infinity,
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Text(
             _selectedPlaces.location!.address,
             textAlign: TextAlign.center,
@@ -41,9 +40,7 @@ class PlaceDetailScreen extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           TextButton(
             onPressed: () {
               Navigator.of(context).push(

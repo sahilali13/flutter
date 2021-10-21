@@ -33,10 +33,10 @@ class CartItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
-      confirmDismiss: (_direction) {
+      confirmDismiss: (direction) {
         return showDialog(
           context: context,
-          builder: (_ctx) => AlertDialog(
+          builder: (ctx) => AlertDialog(
             title: const Text('Are you sure?'),
             content: const Text(
               'Do you want to remove the item from the cart?',
@@ -45,20 +45,20 @@ class CartItem extends StatelessWidget {
               TextButton(
                 child: const Text('No'),
                 onPressed: () {
-                  Navigator.of(_ctx).pop(false);
+                  Navigator.of(ctx).pop(false);
                 },
               ),
               TextButton(
                 child: const Text('Yes'),
                 onPressed: () {
-                  Navigator.of(_ctx).pop(true);
+                  Navigator.of(ctx).pop(true);
                 },
               ),
             ],
           ),
         );
       },
-      onDismissed: (_direction) {
+      onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(

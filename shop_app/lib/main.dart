@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/helpers/custom_route.dart';
 
-import './screens/splash_screen.dart';
-import './screens/cart_screen.dart';
-import './screens/products_overview_screen.dart';
-import './screens/product_detail_screen.dart';
-import './providers/products.dart';
-import './providers/cart.dart';
-import './providers/orders.dart';
-import './providers/auth.dart';
-import './screens/orders_screen.dart';
-import './screens/user_products_screen.dart';
-import './screens/edit_product_screen.dart';
-import './screens/auth_screen.dart';
+import '../helpers/custom_route.dart';
+
+import '../providers/products.dart';
+import '../providers/cart.dart';
+import '../providers/orders.dart';
+import '../providers/auth.dart';
+
+import '../screens/splash_screen.dart';
+import '../screens/cart_screen.dart';
+import '../screens/products_overview_screen.dart';
+import '../screens/product_detail_screen.dart';
+import '../screens/orders_screen.dart';
+import '../screens/user_products_screen.dart';
+import '../screens/edit_product_screen.dart';
+import '../screens/auth_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -48,9 +50,10 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, _auth, _) => MaterialApp(
+        builder: (ctx, auth, _) => MaterialApp(
           title: 'MyShop',
           theme: ThemeData(
+            appBarTheme: const AppBarTheme(color: Colors.purple),
             primarySwatch: Colors.purple,
             fontFamily: 'Lato',
             pageTransitionsTheme: PageTransitionsTheme(
@@ -60,13 +63,14 @@ class MyApp extends StatelessWidget {
               },
             ),
           ).copyWith(
-              colorScheme: ThemeData()
-                  .colorScheme
-                  .copyWith(secondary: Colors.deepOrange)),
-          home: _auth.isAuth
+            colorScheme: ThemeData().colorScheme.copyWith(
+                  secondary: Colors.deepOrange,
+                ),
+          ),
+          home: auth.isAuth
               ? const ProductsOverviewScreen()
               : FutureBuilder(
-                  future: _auth.tryAutoLogin(),
+                  future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) =>
                       authResultSnapshot.connectionState ==
                               ConnectionState.waiting
@@ -74,11 +78,12 @@ class MyApp extends StatelessWidget {
                           : const AuthScreen(),
                 ),
           routes: {
-            ProductDetailScreen.routeName: (_) => const ProductDetailScreen(),
-            CartScreen.routeName: (_) => const CartScreen(),
-            OrdersScreen.routeName: (_) => const OrdersScreen(),
-            UserProductsScreen.routeName: (_) => const UserProductsScreen(),
-            EditProductScreen.routeName: (_) => const EditProductScreen(),
+            ProductDetailScreen.routeName: (_ctx) =>
+                const ProductDetailScreen(),
+            CartScreen.routeName: (_ctx) => const CartScreen(),
+            OrdersScreen.routeName: (_ctx) => const OrdersScreen(),
+            UserProductsScreen.routeName: (_ctx) => const UserProductsScreen(),
+            EditProductScreen.routeName: (_ctx) => const EditProductScreen(),
           },
         ),
       ),
