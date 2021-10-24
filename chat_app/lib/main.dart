@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import '../assets/theme.dart';
-
-import '../screens/auth_screen.dart';
-import '../screens/chat_screen.dart';
+import 'package:chat_app/assets/theme.dart';
+import 'package:chat_app/screens/auth_screen.dart';
+import 'package:chat_app/screens/chat_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

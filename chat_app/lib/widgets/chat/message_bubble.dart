@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 class MessageBubble extends StatelessWidget {
   final String _message;
   final bool _isMe;
+  final String _username;
 
-  const MessageBubble({Key? key, required message, required isMe})
-      : _message = message,
+  const MessageBubble({
+    Key? key,
+    required message,
+    required isMe,
+    required username,
+  })  : _message = message,
         _isMe = isMe,
+        _username = username,
         super(key: key);
 
   @override
@@ -40,13 +46,26 @@ class MessageBubble extends StatelessWidget {
             vertical: 4.0,
             horizontal: 8.0,
           ),
-          child: Text(
-            _message,
-            style: _themeContext.textTheme.headline6!.copyWith(
-              color: _isMe
-                  ? Colors.black87
-                  : _themeContext.colorScheme.onSecondary,
-            ),
+          child: Column(
+            crossAxisAlignment:
+                _isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Text(_username,
+                  style: _themeContext.textTheme.headline5!.copyWith(
+                    color: _isMe
+                        ? Colors.black
+                        : _themeContext.colorScheme.onSecondary,
+                    fontWeight: FontWeight.bold,
+                  )),
+              Text(
+                _message,
+                style: _themeContext.textTheme.headline6!.copyWith(
+                  color: _isMe
+                      ? Colors.black
+                      : _themeContext.colorScheme.onSecondary,
+                ),
+              ),
+            ],
           ),
         ),
       ],

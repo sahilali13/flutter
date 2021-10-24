@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/helpers/snackbar_message.dart';
+import 'package:chat_app/helpers/loading_indicator.dart';
 
 class Messages extends StatelessWidget {
   const Messages({Key? key}) : super(key: key);
@@ -31,14 +31,17 @@ class Messages extends StatelessWidget {
         return ListView.builder(
           reverse: true,
           itemCount: _chatDocs.length,
-          itemBuilder: (_ctx, _index) => MessageBubble(
-            message: _chatDocs[_index]['text'],
-            isMe: FirebaseAuth.instance.currentUser!.uid ==
-                _chatDocs[_index]['userId'],
-            key: ValueKey(
-              _chatDocs[_index].id,
-            ),
-          ),
+          itemBuilder: (_ctx, _index) {
+            return MessageBubble(
+              username: _chatDocs[_index]['username'],
+              message: _chatDocs[_index]['text'],
+              isMe: FirebaseAuth.instance.currentUser!.uid ==
+                  _chatDocs[_index]['userId'],
+              key: ValueKey(
+                _chatDocs[_index].id,
+              ),
+            );
+          },
         );
       },
     );

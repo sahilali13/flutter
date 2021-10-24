@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/helpers/snackbar_message.dart';
-
 import 'package:chat_app/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -22,6 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
     required String? password,
     required String? username,
     required bool isLogin,
+    File? userProfileImage,
   }) async {
     UserCredential _userCredential;
     if (isLogin) {
@@ -61,10 +65,23 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email as String,
           password: password as String,
         );
+        final String _userId = _userCredential.user!.uid;
+        try {
+          await FirebaseStorage.instance
+              .ref()
+              .child('profile_photo')
+              .child(_userId)
+              .putFile(userProfileImage as File);
+        } on FirebaseException catch (_error) {
+          showError(
+            errorMessage: _error.code,
+            context: context,
+          );
+        }
 
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(_userCredential.user!.uid)
+            .doc(_userId)
             .set({
               'username': username,
               'email': email,
@@ -96,13 +113,10 @@ class _AuthScreenState extends State<AuthScreen> {
           _isLoading = false;
         });
       } catch (_error) {
-        showError(
-          errorMessage: _error as String,
-          context: context,
-        );
         setState(() {
           _isLoading = false;
         });
+        rethrow;
       }
     }
   }

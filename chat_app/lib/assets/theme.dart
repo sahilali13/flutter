@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData themeData() {
   return ThemeData(
-    backgroundColor: Colors.pink,
+    primarySwatch: Colors.pink,
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: Colors.deepPurple,
       primary: Colors.pink,
