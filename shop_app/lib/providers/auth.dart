@@ -13,6 +13,18 @@ class Auth with ChangeNotifier {
   String? _userId;
   Timer? _authTimer;
 
+  // ignore: constant_identifier_names
+  static const API_KEY = '';
+
+  // ignore: constant_identifier_names
+  static const URL = 'https://identitytoolkit.googleapis.com/v1/accounts';
+
+  // ignore: constant_identifier_names
+  static const SIGN_UP_SEGMENT = 'signUp';
+
+  // ignore: constant_identifier_names
+  static const SIGN_IN_SEGMENT = 'signInWithPassword';
+
   bool get isAuth {
     return token != null;
   }
@@ -32,7 +44,7 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(
       String? email, String? password, String urlSegment) async {
-    final url = Uri.parse('[URL]:$urlSegment?key=[API_KEY]');
+    final url = Uri.parse('$URL:$urlSegment?key=$API_KEY');
     try {
       final response = await http.post(
         url,
@@ -74,11 +86,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(String? email, String? password) async {
-    return _authenticate(email, password, 'SIGN_UP_WITH_EMAIL');
+    return _authenticate(email, password, SIGN_UP_SEGMENT);
   }
 
   Future<void> login(String? email, String? password) async {
-    return _authenticate(email, password, '[SIGN_IN_WITH_EMAIL]');
+    return _authenticate(email, password, SIGN_IN_SEGMENT);
   }
 
   Future<bool> tryAutoLogin() async {

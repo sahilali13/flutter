@@ -11,6 +11,9 @@ class Product with ChangeNotifier {
   final String? imageUrl;
   bool isFavorite;
 
+  // ignore: constant_identifier_names
+  static const DATABASE_URL = '';
+
   Product({
     required this.id,
     required this.title,
@@ -28,9 +31,10 @@ class Product with ChangeNotifier {
   Future<void> toggleFavoriteStatus(String? token, String? userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
+
     notifyListeners();
     final url =
-        Uri.parse('[DATABASE_URL]/userFavorites/$userId/$id.json?auth=$token');
+        Uri.parse('$DATABASE_URL/userFavorites/$userId/$id.json?auth=$token');
     try {
       final response = await http.put(
         url,

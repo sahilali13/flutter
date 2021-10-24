@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:chat_app/helpers/snackbar_message.dart';
+
 class AuthForm extends StatefulWidget {
   final bool _isLoading;
 
@@ -110,11 +112,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   const SizedBox(height: 12),
                   if (widget._isLoading)
-                    CircularProgressIndicator.adaptive(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
+                    const AdaptiveCircularProgressIndicator(),
                   if (!widget._isLoading)
                     ElevatedButton(
                       child: Text(_isLogin ? 'Login' : 'Sign up'),

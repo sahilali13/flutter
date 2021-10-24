@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 ThemeData themeData() {
   return ThemeData(
-    primarySwatch: Colors.pink,
     backgroundColor: Colors.pink,
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: Colors.deepPurple,
+      primary: Colors.pink,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -32,5 +32,6 @@ ThemeData themeData() {
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.pink,
     ),
+    iconTheme: const IconThemeData(color: Colors.pink),
   );
 }
