@@ -362,7 +362,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3M8XH452HQ;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = "/Info-$(CONFIGURATION).plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -493,7 +493,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3M8XH452HQ;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = "/Info-$(CONFIGURATION).plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -516,7 +516,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3M8XH452HQ;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = "/Info-$(CONFIGURATION).plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

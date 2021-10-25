@@ -35,6 +35,8 @@ class _UserProfilePickerState extends State<UserProfilePicker> {
             onPressed: () async {
               _pickedPhoto = await ImagePicker().pickImage(
                 source: ImageSource.camera,
+                imageQuality: 50,
+                maxWidth: 150,
               );
               Navigator.pop(context);
             },

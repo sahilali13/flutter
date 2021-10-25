@@ -22,19 +22,31 @@ Add the chat_app to a Firebase Project and follow the instructions.
 ## Firestore Rules
 
 	rules_version = '2';
-	service cloud.firestore {
-  		match /databases/{database}/documents {
-  			match /users/{uid} {
-    			allow write: if request.auth != null && request.auth.uid == uid;
-    		}
-    		match /users/{uid}{
-    			allow read: if request.auth != null;
-    		}
-    		match /chat/{document=**}{
-    			allow read, create: if request.auth != null;
-    		}
-	  	}
-	}
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        match /users/{uid} {
+            allow write: if request.auth != null && request.auth.uid == uid;
+        }
+        match /users/{uid}{
+            allow read: if request.auth != null;
+        }
+        match /chat/{document=**}{
+            allow read, create: if request.auth != null;
+        }
+      }
+    }
+
+## Firebase Storage Rules
+
+	rules_version = '2';
+      service firebase.storage {
+        match /b/{bucket}/o {
+          match /{allPaths=**} {
+            allow read, create: if request.auth != null;
+          }
+        }
+      }
+
 
 ## Dependencies
 - flutter_launcher_icons -> <https://pub.dev/packages/flutter_launcher_icons>
@@ -45,4 +57,4 @@ Add the chat_app to a Firebase Project and follow the instructions.
 - image_picker -> <https://pub.dev/packages/image_picker>
 	- Follow the instructions
 - firebase_storage -> <https://pub.dev/packages/firebase_storage>
-- path_provider -> <https://pub.dev/packages/path_provider>
+- firebase_messaging -> <https://pub.dev/packages/firebase_messaging>

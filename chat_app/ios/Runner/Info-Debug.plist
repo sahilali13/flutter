@@ -43,7 +43,13 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to let you pick an image.</string>
-	<key>NSCameraUsageDescriptio</key>
+	<key>NSCameraUsageDescription</key>
 	<string>We need access to let you capture an image.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Local Network Usage</string>
 </dict>
 </plist>

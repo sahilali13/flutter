@@ -52,27 +52,32 @@ class _AuthScreenState extends State<AuthScreen> {
             context: context,
           );
         }
-        setState(() {
-          _isLoading = false;
-        });
       }
     } else {
       try {
         setState(() {
           _isLoading = true;
         });
+
         _userCredential = await _auth.createUserWithEmailAndPassword(
           email: email as String,
           password: password as String,
         );
         final String _userId = _userCredential.user!.uid;
+
+        String? _downloadURL;
+
         try {
-          await FirebaseStorage.instance
+          var _ref = FirebaseStorage.instance
               .ref()
               .child('profile_photo')
-              .child(_userId)
-              .putFile(userProfileImage as File);
+              .child(_userId);
+
+          await _ref.putFile(userProfileImage as File);
+
+          _downloadURL = await _ref.getDownloadURL();
         } on FirebaseException catch (_error) {
+          print('try $_error');
           showError(
             errorMessage: _error.code,
             context: context,
@@ -85,6 +90,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .set({
               'username': username,
               'email': email,
+              'profile_image_url': _downloadURL,
             })
             .then((_value) => showSuccess(
                   message: 'Signup Successful',
@@ -109,13 +115,7 @@ class _AuthScreenState extends State<AuthScreen> {
             context: context,
           );
         }
-        setState(() {
-          _isLoading = false;
-        });
       } catch (_error) {
-        setState(() {
-          _isLoading = false;
-        });
         rethrow;
       }
     }

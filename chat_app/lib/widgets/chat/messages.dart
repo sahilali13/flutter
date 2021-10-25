@@ -33,14 +33,14 @@ class Messages extends StatelessWidget {
           itemCount: _chatDocs.length,
           itemBuilder: (_ctx, _index) {
             return MessageBubble(
-              username: _chatDocs[_index]['username'],
-              message: _chatDocs[_index]['text'],
-              isMe: FirebaseAuth.instance.currentUser!.uid ==
-                  _chatDocs[_index]['userId'],
-              key: ValueKey(
-                _chatDocs[_index].id,
-              ),
-            );
+                username: _chatDocs[_index]['username'],
+                message: _chatDocs[_index]['text'],
+                isMe: FirebaseAuth.instance.currentUser!.uid ==
+                    _chatDocs[_index]['userId'],
+                key: ValueKey(
+                  _chatDocs[_index].id,
+                ),
+                profileImageUrl: _chatDocs[_index]['profile_image_url']);
           },
         );
       },
