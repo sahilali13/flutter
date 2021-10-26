@@ -77,7 +77,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
           _downloadURL = await _ref.getDownloadURL();
         } on FirebaseException catch (_error) {
-          print('try $_error');
           showError(
             errorMessage: _error.code,
             context: context,
