@@ -2,7 +2,7 @@
 
 Flutter & Dart - The Complete Guide [2021 Edition]
 
-Section 14
+Section 14 - Except Firebase Cloud Functions and Automated Push Notifications
 
 ## Getting Started
 
